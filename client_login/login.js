@@ -2,7 +2,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const path = require('path');
+ const path = require('path');
 
 const app = express();
 
@@ -15,23 +15,23 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/clientauth', (request, response) => {
-  response.sendFile(path.join(`${__dirname}/clientlogin.html`));
+app.get('/', (request, response) => {
+  response.sendFile(path.join(__dirname + '/client_login/login.html'));
 });
 
-app.post('/clientauth', (request, response) => {
-  const { fssaiCode } = request.body;
+app.post('/auth', (request, response) => {
+  const { username } = request.body;
   const { password } = request.body;
-  if (fssaiCode && password) {
-    response.send('Client login working.');
-    response.end();
+  if (username && password) {
+    // eslint-disable-next-line no-console
+    console.log(username + password);
   } else {
     response.send('Please enter Username and Password!');
     response.end();
   }
 });
 
-app.get('/clienthome', (request, response) => {
+app.get('/home', (request, response) => {
   if (request.session.loggedin) {
     response.send(`Welcome back, ${request.session.username}!`);
   } else {
