@@ -26,7 +26,8 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(__dirname + '/public'));
 
 app.use('/client', client);
 app.use('/inst', inst);
