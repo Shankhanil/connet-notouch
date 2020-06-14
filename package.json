@@ -4,7 +4,8 @@
   "description": "Experience safe dining with Connet noTouch",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "lintfix": "eslint --fix *.js client/*.js customer/*.js inst/*.js"
   },
   "author": "Shankhanil Ghosh",
   "license": "ISC",
