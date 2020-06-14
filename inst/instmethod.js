@@ -16,9 +16,8 @@ exports.authpost = async (request, response) => {
 };
 
 exports.insthome = async (request, response) => {
-  if (request.session.loggedin) {
+  if (request.session.loggedin && request.session.username === 'admin') {
     response.send(`Welcome back, ${request.session.username}!`);
-    //    request.session.destroy();
   } else {
     response.redirect('/inst/instauth');
   }
