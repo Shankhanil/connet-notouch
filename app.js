@@ -4,12 +4,22 @@ const bodyParser = require("body-parser");
 const path = require('path');
 //const redis = require('./api/configs/redisConfig');
 const app = express();
+const session = require('express-session');
 
 //Imports
 const client = require('./client/client');
 const inst = require('./inst/inst');
 
+
 //Database connection
+
+
+//session
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+}));
 
 app.use(express.static("public"));
 app.use(bodyParser.json({ limit: '100mb' }));
@@ -28,7 +38,7 @@ app.use('/', (req, res, next) => {
     res.statusCode = 200;
     res.setHeader("Content-Type", "text/html");
 //    res.sendFile(__dirname + '/public/index.html');
-    res.send('working');
+    res.send('connet notouch is working');
     next();
 });
 

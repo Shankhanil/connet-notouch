@@ -8,4 +8,7 @@ router.get('/clientauth', clientmethod.authget);
 //Post client login requst
 router.post('/clientauth', clientmethod.authpost);
 
+// get client home
+router.get('/clienthome', clientmethod.clienthome);
+
 module.exports = router;
