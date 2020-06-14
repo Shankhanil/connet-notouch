@@ -17,9 +17,10 @@ exports.authpost = async (request, response) => {
 
 exports.insthome = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
-    response.send(`Welcome back, ${request.session.username}!`);
+//    response.send(`Welcome back, ${request.session.username}!`);
+      response.sendFile(path.join(`${__dirname}/insthome.html`));
   } else {
     response.redirect('/inst/instauth');
-  }
   response.end();
+  }
 };
