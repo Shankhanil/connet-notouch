@@ -8,11 +8,10 @@ const customermethod = require('./customermethod');
 router.post('/:resturant/:tableno/begin', customermethod.begin);
 
 // End session
-router.get('/:resturant/:tableno/end', customermethod.end);
-
-// get dining status
+router.post('/:resturant/:tableno/end', customermethod.end);
 
 router.get('/:resturant/:tableno/status', customermethod.status);
+router.post('/:resturant/:tableno/status', customermethod.status);
 
 router.get('/:resturant/:tableno/begin', customermethod.home);
 
