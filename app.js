@@ -2,7 +2,7 @@ const express = require('express');
 // const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const path = require('path');
-// const redis = require('./api/configs/redisConfig');
+
 const app = express();
 const session = require('express-session');
 
@@ -26,8 +26,11 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 
-//app.use(express.static(path.join(__dirname, 'public')));
-app.use('/public', express.static(__dirname + '/public'));
+// view engine
+app.set('view engine', 'ejs');
+
+// static variables
+app.use('/public', express.static(`${__dirname}/public`));
 
 app.use('/client', client);
 app.use('/inst', inst);

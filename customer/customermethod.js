@@ -1,4 +1,15 @@
-// const path = require('path');
+const path = require('path');
+
+exports.home = async (request, response) => {
+  // eslint-disable-next-line max-len
+  if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
+    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/status`);
+    response.end();
+  } else {
+    //    response.send('NO SESSION ACTIVE');
+    response.sendFile(path.join(`${__dirname}/customerhome.html`));
+  }
+};
 
 exports.begin = async (request, response) => {
   // eslint-disable-next-line max-len

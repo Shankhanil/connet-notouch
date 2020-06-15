@@ -20,8 +20,8 @@ exports.authpost = async (request, response) => {
 };
 exports.clienthome = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'client') {
-//    response.send(`Welcome back, ${request.session.username}!`);
-      response.sendFile(path.join(`${__dirname}/clientdashboard.html`));
+    //    response.send(`Welcome back, ${request.session.username}!`);
+    response.sendFile(path.join(`${__dirname}/clientdashboard.html`));
   } else {
     response.redirect('/client/clientauth');
     response.end();
