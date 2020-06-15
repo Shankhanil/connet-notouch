@@ -1,7 +1,6 @@
 const express = require('express');
 // const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
-const path = require('path');
 
 const app = express();
 const session = require('express-session');
@@ -28,6 +27,7 @@ app.use(bodyParser.urlencoded({
 
 // view engine
 app.set('view engine', 'ejs');
+app.set('views', `${__dirname}/`);
 
 // static variables
 app.use('/public', express.static(`${__dirname}/public`));
@@ -39,8 +39,8 @@ app.use('/customer', customer);
 app.use('/', (req, res, next) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');
-  //    res.sendFile(__dirname + '/public/index.html');
   res.send('connet notouch is working');
+  //    res.render("index", {username: "Neel"});
   next();
 });
 

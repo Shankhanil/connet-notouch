@@ -6,8 +6,7 @@ exports.home = async (request, response) => {
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/status`);
     response.end();
   } else {
-    //    response.send('NO SESSION ACTIVE');
-    response.sendFile(path.join(`${__dirname}/customerhome.html`));
+    response.render(path.join(`${__dirname}/customerhome.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno });
   }
 };
 
