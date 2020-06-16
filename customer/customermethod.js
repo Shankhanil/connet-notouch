@@ -3,7 +3,7 @@ const path = require('path');
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
-    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/status`);
+    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
     response.end();
   } else {
     response.render(path.join(`${__dirname}/customerhome.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno });
@@ -20,7 +20,6 @@ exports.begin = async (request, response) => {
   request.session.resturant = request.params.resturant;
   request.session.order = 0;
   response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order:request.session.order });
-//    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
   response.end();
 };
 
