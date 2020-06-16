@@ -24,3 +24,13 @@ exports.insthome = async (request, response) => {
     response.end();
   }
 };
+
+exports.new = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    //    response.send(`Welcome back, ${request.session.username}!`);
+    response.send('New client will be installed when mongoose DB is installed');
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};

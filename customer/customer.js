@@ -9,6 +9,7 @@ router.post('/:resturant/:tableno/begin', customermethod.begin);
 
 // End session
 router.post('/:resturant/:tableno/end', customermethod.end);
+router.get('/:resturant/:tableno/end', customermethod.end);
 
 router.get('/:resturant/:tableno/status', customermethod.status);
 router.post('/:resturant/:tableno/status', customermethod.status);
@@ -17,5 +18,7 @@ router.get('/:resturant/:tableno/begin', customermethod.home);
 
 router.get('/:resturant/:tableno/order', customermethod.getorder);
 router.post('/:resturant/:tableno/order', customermethod.postorder);
+
+router.post('/:resturant/:tableno/pay', customermethod.pay);
 
 module.exports = router;

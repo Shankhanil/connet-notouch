@@ -13,4 +13,7 @@ router.post('/instauth', instmethod.authpost);
 // get home
 router.get('/insthome', instmethod.insthome);
 
+router.post('/new', instmethod.new);
+router.get('/new', instmethod.new);
+
 module.exports = router;

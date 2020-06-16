@@ -19,7 +19,7 @@ exports.begin = async (request, response) => {
   request.session.tableno = request.params.tableno;
   request.session.resturant = request.params.resturant;
   request.session.order = 0;
-  response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order:request.session.order });
+  response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order: request.session.order });
   response.end();
 };
 
@@ -59,4 +59,8 @@ exports.postorder = async (request, response) => {
   }
   response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
   response.end();
+};
+
+exports.pay = async (request, response) => {
+  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/end`);
 };
