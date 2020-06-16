@@ -15,4 +15,7 @@ router.post('/:resturant/:tableno/status', customermethod.status);
 
 router.get('/:resturant/:tableno/begin', customermethod.home);
 
+router.get('/:resturant/:tableno/order', customermethod.getorder);
+router.post('/:resturant/:tableno/order', customermethod.postorder);
+
 module.exports = router;
