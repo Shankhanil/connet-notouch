@@ -1,7 +1,7 @@
 const path = require('path');
 
 exports.authget = async (request, response) => {
-  response.sendFile(path.join(`${__dirname}/instlogin.html`));
+  response.sendFile(path.join(`${__dirname}/instLogin.html`));
 };
 exports.authpost = async (request, response) => {
   const { password } = request.body;
