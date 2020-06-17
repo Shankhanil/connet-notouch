@@ -1,4 +1,5 @@
 const path = require('path');
+const mailer = require('../extras/mailer');
 
 exports.authget = async (request, response) => {
   response.sendFile(path.join(`${__dirname}/instLogin.html`));
@@ -38,11 +39,10 @@ exports.registerClient = async (request, response) => {
     const {
       fssaiCode, resturantName, email, phoneNumber,
     } = request.body;
-    response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber} Client details`);
-
-    // commit registration details to DB
-
-    // redirect to Menu generator
+    //    response.send('Generating password and sending to Client');
+    const status = mailer.mailClient(email);
+    if (status) response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber} Client details`);
+    else response.send('FAILED REGISTRATION');
   } else {
     response.redirect('/inst/instauth');
     response.end();

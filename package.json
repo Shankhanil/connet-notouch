@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "lintfix": "eslint --fix *.js client/*.js customer/*.js inst/*.js"
+    "lintfix": "eslint --fix *.js extras/*.js client/*.js customer/*.js inst/*.js"
   },
   "author": "Shankhanil Ghosh",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "jasmine": "^3.5.0",
     "multer": "^1.4.2",
     "mutter": "^1.0.1",
+    "nodemailer": "^6.4.10",
     "pug": "^3.0.0",
     "session": "^0.1.0",
     "upload": "^1.0.0"
