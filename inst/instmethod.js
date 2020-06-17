@@ -36,8 +36,10 @@ exports.new = async (request, response) => {
 exports.registerClient = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
     //      response.render(path.join(`${__dirname}/clientinstaller.ejs`));
-    const { fssaiCode } = request.body;
-    response.send(`${fssaiCode} fssai code`);
+    const {
+      fssaiCode, resturantName, email, phoneNumber,
+    } = request.body;
+    response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber} Client details`);
 
     // commit registration details to DB
 
