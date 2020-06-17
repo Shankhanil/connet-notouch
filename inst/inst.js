@@ -16,4 +16,7 @@ router.get('/insthome', instmethod.insthome);
 router.post('/new', instmethod.new);
 router.get('/new', instmethod.new);
 
+router.post('/registerClient', instmethod.registerClient);
+router.get('/registerClient', instmethod.registerClient);
+
 module.exports = router;

@@ -27,8 +27,21 @@ exports.insthome = async (request, response) => {
 
 exports.new = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
-    //    response.send(`Welcome back, ${request.session.username}!`);
-    response.send('New client will be installed when mongoose DB is installed');
+    response.render(path.join(`${__dirname}/clientinstaller.ejs`));
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+exports.registerClient = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    //      response.render(path.join(`${__dirname}/clientinstaller.ejs`));
+    const { fssaiCode } = request.body;
+    response.send(`${fssaiCode} fssai code`);
+
+    // commit registration details to DB
+
+    // redirect to Menu generator
   } else {
     response.redirect('/inst/instauth');
     response.end();
