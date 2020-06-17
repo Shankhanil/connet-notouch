@@ -1,5 +1,6 @@
 const path = require('path');
 const mailer = require('../extras/mailer');
+const passwordGen = require('../extras/passwordGen');
 
 exports.authget = async (request, response) => {
   response.sendFile(path.join(`${__dirname}/instLogin.html`));
@@ -38,8 +39,9 @@ exports.registerClient = async (request, response) => {
     const {
       fssaiCode, resturantName, email, phoneNumber,
     } = request.body;
-    mailer.mailClient(email);
-    response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber} Client details`);
+    const password = passwordGen.generatePassword(fssaiCode);
+    mailer.mailClient(email, { fssaiCode, password });
+    response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber}, ${password} Client details`);
   } else {
     response.redirect('/inst/instauth');
     response.end();

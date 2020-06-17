@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-exports.mailClient = function mailClient(clientMail) {
+exports.mailClient = function mailClient(clientMail, { fssaiCode, password }) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -12,8 +12,8 @@ exports.mailClient = function mailClient(clientMail) {
   const mailOptions = {
     from: 'shankha.rik@gmail.com',
     to: clientMail,
-    subject: 'Client registration mail from Connet',
-    text: 'Tune maari entry aur dil me baji ghanti aurrr teng teng teng teng',
+    subject: 'Congratulations on Registering with Connet',
+    text: `Your login ID is ${fssaiCode}\nAnd your password is ${password}`,
   };
 
   transporter.sendMail(mailOptions, (error) => {
