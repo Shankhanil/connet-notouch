@@ -18,7 +18,7 @@ router.get('/new', instmethod.new);
 
 router.post('/registerClient', instmethod.registerClient);
 router.get('/registerClient', async (request, response) => {
-    response.redirect('/inst/new');
+  response.redirect('/inst/new');
 });
 
 module.exports = router;
