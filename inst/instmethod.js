@@ -18,7 +18,6 @@ exports.authpost = async (request, response) => {
 
 exports.insthome = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
-    //    response.send(`Welcome back, ${request.session.username}!`);
     response.render(path.join(`${__dirname}/insthome.ejs`));
   } else {
     response.redirect('/inst/instauth');
@@ -39,10 +38,8 @@ exports.registerClient = async (request, response) => {
     const {
       fssaiCode, resturantName, email, phoneNumber,
     } = request.body;
-    //    response.send('Generating password and sending to Client');
-    const status = mailer.mailClient(email);
-    if (status) response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber} Client details`);
-    else response.send('FAILED REGISTRATION');
+    mailer.mailClient(email);
+    response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber} Client details`);
   } else {
     response.redirect('/inst/instauth');
     response.end();
