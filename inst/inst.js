@@ -21,4 +21,14 @@ router.get('/registerClient', async (request, response) => {
   response.redirect('/inst/new');
 });
 
+router.post('/regen', instmethod.regenPasswordCall);
+router.get('/regen', async (request, response) => {
+  response.redirect('/inst/insthome');
+});
+
+router.post('/regenPassword', instmethod.regenPassword);
+router.get('/regenPassword', async (request, response) => {
+  response.redirect('/inst/insthome');
+});
+
 module.exports = router;

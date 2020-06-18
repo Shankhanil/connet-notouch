@@ -41,7 +41,6 @@ app.use('/', (req, res, next) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');
   res.send('connet notouch is working');
-  //    res.render("index", {username: "Neel"});
   next();
 });
 

@@ -34,14 +34,38 @@ exports.new = async (request, response) => {
     response.end();
   }
 };
+
 exports.registerClient = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
     const {
       fssaiCode, resturantName, email, phoneNumber,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
-    mailer.mailClient(email, { fssaiCode, password });
+    mailer.mailClient(email, { fssaiCode, password }, true);
     response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber}, ${password} Client details`);
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+
+exports.regenPasswordCall = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    response.render(path.join(`${__dirname}/clientregen.ejs`));
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+
+exports.regenPassword = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    const {
+      fssaiCode, email,
+    } = request.body;
+    const password = passwordGen.generatePassword(fssaiCode);
+    mailer.mailClient(email, { fssaiCode, password }, false);
+    response.send('New password emailed');
   } else {
     response.redirect('/inst/instauth');
     response.end();
