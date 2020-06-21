@@ -18,7 +18,7 @@ exports.begin = async (request, response) => {
   request.session.loggedin = true;
   request.session.tableno = request.params.tableno;
   request.session.resturant = request.params.resturant;
-  request.session.order = 0;
+  request.session.order = { id: 1, naan: 0 };
   response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order: request.session.order });
   response.end();
 };
@@ -47,20 +47,31 @@ exports.getorder = async (request, response) => {
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
     response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order: request.session.order });
   }
-  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
+  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
   response.end();
 };
 
 exports.postorder = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
-    request.session.order += 1;
+    request.session.order.naan += 1;
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
   }
   response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
   response.end();
 };
 
-exports.pay = async (request, response) => {
-  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/end`);
+exports.generatebill = async (request, response) => {
+  // eslint-disable-next-line max-len
+  if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
+    const bill = request.session.order.naan * 20;
+    response.render(path.join(`${__dirname}/customerbill.ejs`), {
+      resturant: request.params.resturant,
+      tableno: request.params.tableno,
+      order: request.session.order,
+      bill,
+    });
+  }
+  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
+  response.end();
 };
