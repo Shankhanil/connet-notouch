@@ -54,10 +54,8 @@ exports.registerClient = async (request, response) => {
       const sql = 'INSERT INTO CLIENT (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
       con.query(sql, [fssaiCode, resturantName, email, phoneNumber, password], (_err) => {
         if (_err) throw _err;
-        //    console.log("1 record inserted");
         mailer.mailClient(email, { fssaiCode, password }, true);
-//        response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber}, ${password} Client details`);
-          response.redirect('/inst/insthome');
+        response.redirect('/inst/insthome');
       });
     });
   } else {
@@ -81,8 +79,16 @@ exports.regenPassword = async (request, response) => {
       fssaiCode, email,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
-    mailer.mailClient(email, { fssaiCode, password }, false);
-    response.send('New password emailed');
+    con.connect((err) => {
+      if (err) throw err;
+      const sql = 'UPDATE CLIENT SET password = ? WHERE fssai=?';
+      con.query(sql, [password, fssaiCode], (_err) => {
+        if (_err) throw _err;
+        mailer.mailClient(email, { fssaiCode, password }, false);
+        response.redirect('/inst/insthome');
+      });
+    });
+    //    response.send('New password emailed');
   } else {
     response.redirect('/inst/instauth');
     response.end();
