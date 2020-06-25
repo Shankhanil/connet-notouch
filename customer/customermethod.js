@@ -1,6 +1,14 @@
 const path = require('path');
+// const mysql = require('mysql');
 const misc = require('../extras/misc');
-
+/*
+const con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'connetdb',
+});
+*/
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
@@ -23,7 +31,7 @@ exports.begin = async (request, response) => {
   request.session.order = {
     orderid: 1,
     orderdate: request.session.date = misc.today(),
-      ordercount:0,
+    ordercount: 0,
     orderbill: 0,
     orderdetails: {},
   };
@@ -64,9 +72,9 @@ exports.postorder = async (request, response) => {
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
     if (request.session.order.orderdetails.item == null) {
       request.session.order.ordercount += 1;
-        request.session.order.orderdetails.item = {};
-        request.session.order.orderdetails.item.name = 'Naan';
-        request.session.order.orderdetails.item.qty = 1;
+      request.session.order.orderdetails.item = {};
+      request.session.order.orderdetails.item.name = 'Naan';
+      request.session.order.orderdetails.item.qty = 1;
     } else {
       request.session.order.orderdetails.item.qty += 1;
     }

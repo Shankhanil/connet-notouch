@@ -1,6 +1,14 @@
 const path = require('path');
+const mysql = require('mysql');
 const mailer = require('../extras/mailer');
 const passwordGen = require('../extras/passwordGen');
+
+const con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'connetdb',
+});
 
 exports.authget = async (request, response) => {
   response.sendFile(path.join(`${__dirname}/instLogin.html`));
@@ -41,8 +49,17 @@ exports.registerClient = async (request, response) => {
       fssaiCode, resturantName, email, phoneNumber,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
-    mailer.mailClient(email, { fssaiCode, password }, true);
-    response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber}, ${password} Client details`);
+    con.connect((err) => {
+      if (err) throw err;
+      const sql = 'INSERT INTO CLIENT (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
+      con.query(sql, [fssaiCode, resturantName, email, phoneNumber, password], (_err) => {
+        if (_err) throw _err;
+        //    console.log("1 record inserted");
+        mailer.mailClient(email, { fssaiCode, password }, true);
+//        response.send(`${fssaiCode}, ${resturantName}, ${email}, ${phoneNumber}, ${password} Client details`);
+          response.redirect('/inst/insthome');
+      });
+    });
   } else {
     response.redirect('/inst/instauth');
     response.end();
