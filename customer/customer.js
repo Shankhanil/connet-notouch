@@ -22,4 +22,5 @@ router.post('/:resturant/:tableno/order', customermethod.postorder);
 router.post('/:resturant/:tableno/bill', customermethod.generatebill);
 router.get('/:resturant/:tableno/bill', customermethod.generatebill);
 
+
 module.exports = router;

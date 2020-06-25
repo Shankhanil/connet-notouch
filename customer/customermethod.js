@@ -1,4 +1,5 @@
 const path = require('path');
+const misc = require('../extras/misc');
 
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
@@ -15,10 +16,17 @@ exports.begin = async (request, response) => {
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
   }
+  request.session.date = misc.today();
   request.session.loggedin = true;
   request.session.tableno = request.params.tableno;
   request.session.resturant = request.params.resturant;
-  request.session.order = { id: 1, naan: 0 };
+  request.session.order = {
+    orderid: 1,
+    orderdate: request.session.date = misc.today(),
+      ordercount:0,
+    orderbill: 0,
+    orderdetails: {},
+  };
   response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order: request.session.order });
   response.end();
 };
@@ -54,7 +62,15 @@ exports.getorder = async (request, response) => {
 exports.postorder = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
-    request.session.order.naan += 1;
+    if (request.session.order.orderdetails.item == null) {
+      request.session.order.ordercount += 1;
+        request.session.order.orderdetails.item = {};
+        request.session.order.orderdetails.item.name = 'Naan';
+        request.session.order.orderdetails.item.qty = 1;
+    } else {
+      request.session.order.orderdetails.item.qty += 1;
+    }
+
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
   }
   response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
@@ -64,12 +80,17 @@ exports.postorder = async (request, response) => {
 exports.generatebill = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
-    const bill = request.session.order.naan * 20;
+    let bill = 0;
+    if (request.session.order.orderdetails.item != null) {
+      bill = request.session.order.orderdetails.item.qty * 20;
+    }
+
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
       resturant: request.params.resturant,
       tableno: request.params.tableno,
       order: request.session.order,
       bill,
+      date: request.session.date,
     });
   }
   response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
