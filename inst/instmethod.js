@@ -1,14 +1,9 @@
 const path = require('path');
-const mysql = require('mysql');
+const db = require('../dbconfig');
 const mailer = require('../extras/mailer');
 const passwordGen = require('../extras/passwordGen');
 
-const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'connetdb',
-});
+const { con } = db;
 
 exports.authget = async (request, response) => {
   response.sendFile(path.join(`${__dirname}/instLogin.html`));
@@ -49,14 +44,27 @@ exports.registerClient = async (request, response) => {
       fssaiCode, resturantName, email, phoneNumber,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
-    con.connect((err) => {
-      if (err) throw err;
-      const sql = 'INSERT INTO CLIENT (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
-      con.query(sql, [fssaiCode, resturantName, email, phoneNumber, password], (_err) => {
-        if (_err) throw _err;
-        mailer.mailClient(email, { fssaiCode, password }, true);
-        response.redirect('/inst/insthome');
-      });
+
+    const sql = 'INSERT INTO CLIENT (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
+    const vars = [fssaiCode, resturantName, email, phoneNumber, password];
+    const query = con.query({
+      sql,
+      timeout: 10000,
+    }, vars);
+
+    query.on('error', (err) => {
+      if (err) {
+        response.send(`Error:${err}`);
+      }
+    });
+
+    query.on('result', () => {
+      mailer.mailClient(email, { fssaiCode, password }, true);
+      response.redirect('/inst/insthome');
+    });
+
+    query.on('end', () => {
+//      con.release();
     });
   } else {
     response.redirect('/inst/instauth');
@@ -79,16 +87,27 @@ exports.regenPassword = async (request, response) => {
       fssaiCode, email,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
-    con.connect((err) => {
-      if (err) throw err;
-      const sql = 'UPDATE CLIENT SET password = ? WHERE fssai=?';
-      con.query(sql, [password, fssaiCode], (_err) => {
-        if (_err) throw _err;
-        mailer.mailClient(email, { fssaiCode, password }, false);
-        response.redirect('/inst/insthome');
-      });
+    const sql = 'UPDATE CLIENT SET password = ? WHERE fssai=?';
+    const vars = [password, fssaiCode];
+    const query = con.query({
+      sql,
+      timeout: 10000,
+    }, vars);
+
+    query.on('error', (err) => {
+      if (err) {
+        response.send(`Error:${err}`);
+      }
     });
-    //    response.send('New password emailed');
+
+    query.on('result', () => {
+      mailer.mailClient(email, { fssaiCode, password }, true);
+      response.redirect('/inst/insthome');
+    });
+
+    query.on('end', () => {
+//      con.release();
+    });
   } else {
     response.redirect('/inst/instauth');
     response.end();
