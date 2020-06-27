@@ -38,7 +38,11 @@ router.get('/:fssai/addmenu/more', instmethod.addmenu);
 router.post('/fssaiauth', instmethod.fssaiauth);
 router.get('/fssaiauth', instmethod.fssaiauth);
 
-router.post('/fssaiauthredirect', instmethod.fssaiauthredirect);
-router.get('/fssaiauthredirect', instmethod.fssaiauthredirect);
+router.post('/fssaiauthredirect', async (request, response) => {
+  response.redirect(`/inst/${request.body.fssaiCode}/addmenu/more`);
+});
+router.get('/fssaiauthredirect', async (request, response) => {
+  response.redirect(`/inst/${request.body.fssaiCode}/addmenu/more`);
+});
 
 module.exports = router;

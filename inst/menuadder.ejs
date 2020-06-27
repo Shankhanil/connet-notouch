@@ -15,7 +15,8 @@
 <body>
     <div class="container">
             <form class="form-horizontal" role="form" method="post">
-                <h2>Registration</h2>
+                <h1><%= resturant %></h1>
+                <h2>Adding menu item</h2>
                 <div class="form-group">
                     <label for="itemName" class="col-sm-3 control-label">Item Name*</label>
                     <div class="col-sm-9">
@@ -41,12 +42,7 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <label class="radio-inline">
-                                    <input type="radio" id="basicRadio" value="Basic" checked="checked">Veg
-                                </label>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="radio-inline">
-                                    <input type="radio" id="advRadio" value="Advanced">Non Veg
+                                    <input type="checkbox" id="basicRadio" value="Basic"> Veg
                                 </label>
                             </div>
                         </div>
@@ -57,8 +53,8 @@
                         <span class="help-block">*Required fields</span>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" formaction="addmenu/more">Add more items</button>
-                <button type="submit" class="btn btn-primary btn-block" formaction="addmenu/more">Add and finish</button>
+                <button type="submit" class="btn btn-primary btn-block" formaction="more">Add more items</button>
+                <button type="submit" class="btn btn-primary btn-block" formaction="more">Add and finish</button>
                 <button type="submit" class="btn btn-primary btn-block" formaction="/inst/insthome">Cancel</button>
             </form>
         </div>
