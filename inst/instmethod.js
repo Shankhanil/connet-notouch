@@ -5,9 +5,6 @@ const passwordGen = require('../extras/passwordGen');
 
 const { con } = db;
 
-exports.authget = async (request, response) => {
-  response.sendFile(path.join(`${__dirname}/instLogin.html`));
-};
 exports.authpost = async (request, response) => {
   const { password } = request.body;
   if (password === '21232f297a57a5a743894a0e4a801fc3') {

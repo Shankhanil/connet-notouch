@@ -1,11 +1,14 @@
 const express = require('express');
+const path = require('path');
 
 const router = express.Router();
 
 const instmethod = require('./instmethod');
 
 // Get inst login request
-router.get('/instauth', instmethod.authget);
+router.get('/instauth', async (request, response) => {
+  response.sendFile(path.join(`${__dirname}/instLogin.html`));
+});
 
 // Post inst login requst
 router.post('/instauth', instmethod.authpost);

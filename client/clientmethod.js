@@ -1,35 +1,43 @@
 const path = require('path');
-// const mysql = require('mysql');
-/*
-const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'connetdb',
-});
-*/
-exports.authget = async (request, response) => {
-  response.sendFile(path.join(`${__dirname}/clientlogin.html`));
-};
+const db = require('../dbconfig');
+
+const { con } = db;
+
+
 exports.authpost = async (request, response) => {
   const { fssaiCode } = request.body;
   const { password } = request.body;
+//    response.redirect('/inst/insthome');
+    
   if (request.session.loggedin && request.session.username === 'client') {
     response.redirect('/client/clienthome');
-  }
-  if (fssaiCode && password) {
-    request.session.loggedin = true;
-    request.session.username = 'client';
-    response.redirect('/client/clienthome');
   } else {
-    response.send('Please enter Username and Password!');
+    const sql = 'SELECT name, password, fssai FROM Client where fssai = ?';
+    const vars = [fssaiCode];
+    const query = con.query({
+      sql,
+      timeout: 10000,
+    }, vars);
+      
+    query.on('result', (result) => {
+      if (result.password === password) {
+        request.session.loggedin = true;
+        request.session.username = 'client';
+        response.redirect('/client/clienthome');
+        response.end();
+      } else {
+        response.send('wrong password');
+      }
+    });
+    query.on('err', (err) => {
+      response.send(`Error:${err}`);
+    });
   }
-  response.end();
+  //  response.send('no query result. WTF');*/
 };
 exports.clienthome = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'client') {
-    //    response.send(`Welcome back, ${request.session.username}!`);
-    response.sendFile(path.join(`${__dirname}/clientdashboard.html`));
+    response.render(path.join(`${__dirname}/clientdashboard.ejs`));
   } else {
     response.redirect('/client/clientauth');
     response.end();
