@@ -64,7 +64,7 @@ exports.registerClient = async (request, response) => {
     });
 
     query.on('end', () => {
-//      con.release();
+      //      con.release();
     });
   } else {
     response.redirect('/inst/instauth');
@@ -106,8 +106,35 @@ exports.regenPassword = async (request, response) => {
     });
 
     query.on('end', () => {
-//      con.release();
+      //      con.release();
     });
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+
+exports.addmenu = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    response.render(path.join(`${__dirname}/menuadder.ejs`));
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+
+exports.fssaiauth = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    response.render(path.join(`${__dirname}/fssaiauth.ejs`));
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+
+exports.fssaiauthredirect = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    response.redirect(`/inst/${request.body.fssaiCode}/addmenu/more`);
   } else {
     response.redirect('/inst/instauth');
     response.end();
