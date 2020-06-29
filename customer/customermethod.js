@@ -15,9 +15,9 @@ exports.home = async (request, response) => {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/order`);
     response.end();
   } else {
-    const sql = 'Select name from client where fssai=?';
+    let sql = 'Select name from client where fssai=?';
     const vars = [request.params.fssai];
-    const query = con.query({
+    let query = con.query({
       sql,
       timeout: 10000,
     }, vars);
@@ -25,7 +25,18 @@ exports.home = async (request, response) => {
     query.on('result', (result) => {
     //    menu.push(result);
       resturantName = result.name;
-    response.render(path.join(`${__dirname}/customerhome.ejs`), { resturant: resturantName, tableno: request.params.tableno });
+      if (menu.length === 0) {
+        sql = `Select foodName, price, qty from menu_basic_${request.params.fssai} where acive=1`;
+        query = con.query({
+          sql,
+          timeout: 10000,
+        });
+
+        query.on('result', (res) => {
+          menu.push(res);
+        });
+      }
+      response.render(path.join(`${__dirname}/customerhome.ejs`), { resturant: resturantName, tableno: request.params.tableno });
     });
   }
 };
@@ -47,18 +58,9 @@ exports.begin = async (request, response) => {
     orderbill: 0,
     orderdetails: {},
   };
-
-  const sql = `Select foodName, price, qty from menu_basic_${request.session.fssai} where acive=1`;
-  const query = con.query({
-    sql,
-    timeout: 10000,
-  });
-
-  query.on('result', (result) => {
-    menu.push(result);
-  });
-
-  response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: resturantName, tableno: request.params.tableno, order: request.session.order });
+  response.render(path.join(`${__dirname}/customermenu.ejs`), { resturant: resturantName, tableno: request.params.tableno, menu });
+  // eslint-disable-next-line max-len
+  //  response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: resturantName, tableno: request.params.tableno, order: request.session.order });
   response.end();
 };
 
@@ -129,4 +131,8 @@ exports.generatebill = async (request, response) => {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
     response.end();
   }
+};
+
+exports.menuRedirect = async (request, response) => {
+  response.render(path.join(`${__dirname}/customermenu.ejs`), { resturant: resturantName, tableno: request.params.tableno, menu });
 };
