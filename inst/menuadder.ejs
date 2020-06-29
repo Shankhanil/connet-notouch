@@ -18,15 +18,15 @@
                 <h1><%= resturant %></h1>
                 <h2>Adding menu item</h2>
                 <div class="form-group">
-                    <label for="itemName" class="col-sm-3 control-label">Item Name*</label>
+                    <label for="foodName" class="col-sm-3 control-label">Item Name*</label>
                     <div class="col-sm-9">
-                        <input type="text" id="itemName" name="itemName" placeholder="Item Name" class="form-control" autofocus required>
+                        <input type="text" id="foodName" name="foodName" placeholder="Item Name" class="form-control" autofocus required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="fssaiCode" class="col-sm-3 control-label">Item Price*</label>
                     <div class="col-sm-9">
-                        <input type="number" id="itemPrice" name="itemPrice" placeholder="Item Price" class="form-control" autofocus required>
+                        <input type="number" id="foodPrice" name="foodPrice" placeholder="Item Price" class="form-control" autofocus required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <label class="radio-inline">
-                                    <input type="checkbox" id="basicRadio" value="Basic"> Veg
+                                    <input type="checkbox" id="isVeg" name="isVeg" value="veg"> Veg
                                 </label>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block" formaction="more">Add more items</button>
-                <button type="submit" class="btn btn-primary btn-block" formaction="more">Add and finish</button>
+                <button type="submit" class="btn btn-primary btn-block" formaction="finish">Add and finish</button>
                 <button type="submit" class="btn btn-primary btn-block" formaction="/inst/insthome">Cancel</button>
             </form>
         </div>

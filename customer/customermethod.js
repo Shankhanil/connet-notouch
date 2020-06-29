@@ -1,8 +1,8 @@
 const path = require('path');
 // const mysql = require('mysql');
 const misc = require('../extras/misc');
-const io = require('../socket');
-var socket = io();
+// const io = require('../socket');
+
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin
@@ -78,7 +78,7 @@ exports.postorder = async (request, response) => {
     } else {
       request.session.order.orderdetails.item.qty += 1;
     }
-    
+
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
     response.end();
   } else {

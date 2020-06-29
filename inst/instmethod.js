@@ -56,8 +56,18 @@ exports.registerClient = async (request, response) => {
     });
 
     query.on('result', () => {
-      mailer.mailClient(email, { fssaiCode, password }, true);
-      response.redirect('/inst/insthome');
+      const createTableSQL = `CREATE TABLE menu_basic_${fssaiCode} (foodID integer AUTO_INCREMENT, foodName varchar(100) not NULL, qty varchar (10), isVeg varchar(7) default 'non veg', price integer not NULL, acive bool not null default 1, primary key(foodID))`;
+      const query2 = con.query({
+        sql: createTableSQL,
+        timeout: 10000,
+      });
+      query2.on('result', () => {
+        response.redirect('/inst/insthome');
+        mailer.mailClient(email, { fssaiCode, password }, true);
+      });
+      query2.on('error', (error) => {
+        response.send(error.toString());
+      });
     });
 
     query.on('end', () => {
@@ -96,7 +106,6 @@ exports.regenPassword = async (request, response) => {
         response.send(`Error:${err}`);
       }
     });
-
     query.on('result', () => {
       mailer.mailClient(email, { fssaiCode, password }, true);
       response.redirect('/inst/insthome');
@@ -112,15 +121,40 @@ exports.regenPassword = async (request, response) => {
 };
 
 exports.addmenu = async (request, response) => {
+  let vars;
   if (request.session.loggedin && request.session.username === 'admin') {
     const { fssai } = request.params;
     const sql = 'SELECT name FROM Client where fssai=?';
-    const vars = [fssai];
+    vars = [fssai];
     const query = con.query({
       sql,
       timeout: 10000,
     }, vars);
+    const { foodName, foodPrice } = request.body;
+    let {
+      isVeg, qty,
+    } = request.body;
+    if (!isVeg) {
+      isVeg = 'non veg';
+    }
+    if (!qty) {
+      qty = '';
+    }
     query.on('result', (result) => {
+      if (foodName) {
+        const addMenuSQL = `INSERT INTO menu_basic_${fssai} (foodName, qty, isVeg, price) VALUES (?,?, ?, ?)`;
+        vars = [foodName, qty, isVeg, foodPrice];
+
+        const query2 = con.query({
+          sql: addMenuSQL,
+          timeout: 10000,
+        }, vars);
+        //        query2.on('result', () => {
+        //        });
+        query2.on('error', (error) => {
+          response.send(error.toString());
+        });
+      }
       response.render(path.join(`${__dirname}/menuadder.ejs`), { resturant: result.name });
     });
   } else {
@@ -132,6 +166,23 @@ exports.addmenu = async (request, response) => {
 exports.fssaiauth = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
     response.render(path.join(`${__dirname}/fssaiauth.ejs`));
+  } else {
+    response.redirect('/inst/instauth');
+    response.end();
+  }
+};
+exports.finish = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'admin') {
+    const { fssai } = request.params;
+    const sql = 'SELECT name FROM Client where fssai=?';
+    const vars = [fssai];
+    const query = con.query({
+      sql,
+      timeout: 10000,
+    }, vars);
+    query.on('result', () => {
+      response.redirect('/inst/insthome');
+    });
   } else {
     response.redirect('/inst/instauth');
     response.end();

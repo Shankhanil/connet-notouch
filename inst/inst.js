@@ -48,4 +48,10 @@ router.get('/fssaiauthredirect', async (request, response) => {
   response.redirect(`/inst/${request.body.fssaiCode}/addmenu/more`);
 });
 
+router.get('/:fssai/addmenu/finish', async (request, response) => {
+  response.redirect(`/inst/${request.body.fssaiCode}/addmenu/more`);
+});
+
+router.post('/:fssai/addmenu/finish', instmethod.finish);
+
 module.exports = router;
