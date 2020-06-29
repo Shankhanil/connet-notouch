@@ -42,7 +42,7 @@ exports.registerClient = async (request, response) => {
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
 
-    const sql = 'INSERT INTO CLIENT (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO client (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
     const vars = [fssaiCode, resturantName, email, phoneNumber, password];
     const query = con.query({
       sql,
@@ -94,7 +94,7 @@ exports.regenPassword = async (request, response) => {
       fssaiCode, email,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
-    const sql = 'UPDATE CLIENT SET password = ? WHERE fssai=?';
+    const sql = 'UPDATE client SET password = ? WHERE fssai=?';
     const vars = [password, fssaiCode];
     const query = con.query({
       sql,
@@ -124,7 +124,7 @@ exports.addmenu = async (request, response) => {
   let vars;
   if (request.session.loggedin && request.session.username === 'admin') {
     const { fssai } = request.params;
-    const sql = 'SELECT name FROM Client where fssai=?';
+    const sql = 'SELECT name FROM client where fssai=?';
     vars = [fssai];
     const query = con.query({
       sql,
@@ -175,7 +175,7 @@ exports.finish = async (request, response) => {
   let vars;
   if (request.session.loggedin && request.session.username === 'admin') {
     const { fssai } = request.params;
-    const sql = 'SELECT name FROM Client where fssai=?';
+    const sql = 'SELECT name FROM client where fssai=?';
     vars = [fssai];
     const query = con.query({
       sql,
