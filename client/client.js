@@ -5,11 +5,9 @@ const router = express.Router();
 // const cacheMiddleware = require('../middlewares/cache');
 const clientmethod = require('./clientmethod');
 
-
 router.get('/clientauth', async (request, response) => {
   response.sendFile(path.join(`${__dirname}/clientlogin.html`));
 });
-
 
 router.post('/clientauth', clientmethod.authpost);
 router.get('/clienthome', clientmethod.clienthome);

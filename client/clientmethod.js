@@ -3,12 +3,11 @@ const db = require('../dbconfig');
 
 const { con } = db;
 
-
 exports.authpost = async (request, response) => {
   const { fssaiCode } = request.body;
   const { password } = request.body;
-//    response.redirect('/inst/insthome');
-    
+  //    response.redirect('/inst/insthome');
+
   if (request.session.loggedin && request.session.username === 'client') {
     response.redirect('/client/clienthome');
   } else {
@@ -18,7 +17,7 @@ exports.authpost = async (request, response) => {
       sql,
       timeout: 10000,
     }, vars);
-      
+
     query.on('result', (result) => {
       if (result.password === password) {
         request.session.loggedin = true;

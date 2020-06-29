@@ -1,17 +1,13 @@
 const path = require('path');
 // const mysql = require('mysql');
 const misc = require('../extras/misc');
-/*
-const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'connetdb',
-});
-*/
+const io = require('../socket');
+var socket = io();
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
-  if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
+  if (request.session.loggedin
+      && request.session.tableno === request.params.tableno
+      && request.session.resturant === request.params.resturant) {
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
     response.end();
   } else {
@@ -21,7 +17,9 @@ exports.home = async (request, response) => {
 
 exports.begin = async (request, response) => {
   // eslint-disable-next-line max-len
-  if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
+  if (request.session.loggedin
+      && request.session.tableno === request.params.tableno
+      && request.session.resturant === request.params.resturant) {
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
   }
   request.session.date = misc.today();
@@ -35,6 +33,7 @@ exports.begin = async (request, response) => {
     orderbill: 0,
     orderdetails: {},
   };
+
   response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order: request.session.order });
   response.end();
 };
@@ -62,9 +61,10 @@ exports.getorder = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.resturant === request.params.resturant) {
     response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: request.params.resturant, tableno: request.params.tableno, order: request.session.order });
+  } else {
+    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
+    response.end();
   }
-  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
-  response.end();
 };
 
 exports.postorder = async (request, response) => {
@@ -78,11 +78,13 @@ exports.postorder = async (request, response) => {
     } else {
       request.session.order.orderdetails.item.qty += 1;
     }
-
+    
     response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/order`);
+    response.end();
+  } else {
+    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
+    response.end();
   }
-  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
-  response.end();
 };
 
 exports.generatebill = async (request, response) => {
@@ -100,7 +102,8 @@ exports.generatebill = async (request, response) => {
       bill,
       date: request.session.date,
     });
+  } else {
+    response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
+    response.end();
   }
-  response.redirect(`/customer/${request.params.resturant}/${request.params.tableno}/begin`);
-  response.end();
 };
