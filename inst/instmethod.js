@@ -172,15 +172,40 @@ exports.fssaiauth = async (request, response) => {
   }
 };
 exports.finish = async (request, response) => {
+  let vars;
   if (request.session.loggedin && request.session.username === 'admin') {
     const { fssai } = request.params;
     const sql = 'SELECT name FROM Client where fssai=?';
-    const vars = [fssai];
+    vars = [fssai];
     const query = con.query({
       sql,
       timeout: 10000,
     }, vars);
+    const { foodName, foodPrice } = request.body;
+    let {
+      isVeg, qty,
+    } = request.body;
+    if (!isVeg) {
+      isVeg = 'non veg';
+    }
+    if (!qty) {
+      qty = '';
+    }
     query.on('result', () => {
+      if (foodName) {
+        const addMenuSQL = `INSERT INTO menu_basic_${fssai} (foodName, qty, isVeg, price) VALUES (?,?, ?, ?)`;
+        vars = [foodName, qty, isVeg, foodPrice];
+
+        const query2 = con.query({
+          sql: addMenuSQL,
+          timeout: 10000,
+        }, vars);
+        //        query2.on('result', () => {
+        //        });
+        query2.on('error', (error) => {
+          response.send(error.toString());
+        });
+      }
       response.redirect('/inst/insthome');
     });
   } else {
