@@ -25,17 +25,17 @@ exports.home = async (request, response) => {
     query.on('result', (result) => {
     //    menu.push(result);
       resturantName = result.name;
-      if (menu.length === 0) {
-        sql = `Select foodName, price, qty from menu_basic_${request.params.fssai} where acive=1`;
-        query = con.query({
-          sql,
-          timeout: 10000,
-        });
+      //      if (menu.length === 0) {
+      sql = `Select foodName, price, qty from menu_basic_${request.params.fssai} where acive=1`;
+      query = con.query({
+        sql,
+        timeout: 10000,
+      });
 
-        query.on('result', (res) => {
-          menu.push(res);
-        });
-      }
+      query.on('result', (res) => {
+        menu.push(res);
+      });
+      //      }
       response.render(path.join(`${__dirname}/customerhome.ejs`), { resturant: resturantName, tableno: request.params.tableno });
     });
   }
@@ -58,9 +58,9 @@ exports.begin = async (request, response) => {
     orderbill: 0,
     orderdetails: {},
   };
-  response.render(path.join(`${__dirname}/customermenu.ejs`), { resturant: resturantName, tableno: request.params.tableno, menu });
-  // eslint-disable-next-line max-len
-  //  response.render(path.join(`${__dirname}/customerorder.ejs`), { resturant: resturantName, tableno: request.params.tableno, order: request.session.order });
+  response.render(path.join(`${__dirname}/customermenu.ejs`), {
+    resturant: resturantName, tableno: request.params.tableno, order: request.session.order, menu,
+  });
   response.end();
 };
 
@@ -98,7 +98,7 @@ exports.postorder = async (request, response) => {
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/order`);
     response.end();
-//      console.log(request.session.order);
+    //      console.log(request.session.order);
   } else {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
     response.end();
@@ -109,15 +109,18 @@ exports.generatebill = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
     let bill = 0;
-    if (request.session.order.orderdetails.item != null) {
-      bill = request.session.order.orderdetails.item.qty * 20;
+    for (const key in Object.keys(request.session.order.orderdetails)) {
+      if (request.session.order.orderdetails[key]) {
+        bill += request.session.order.orderdetails[key].qty
+            * request.session.order.orderdetails[key].price;
+      }
     }
-
+    request.session.order.orderbill = bill;
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
       resturant: resturantName,
       tableno: request.params.tableno,
       order: request.session.order,
-      bill,
+      bill: request.session.order.orderbill,
       date: request.session.date,
     });
   } else {
@@ -127,20 +130,39 @@ exports.generatebill = async (request, response) => {
 };
 
 exports.menuRedirect = async (request, response) => {
-  response.render(path.join(`${__dirname}/customermenu.ejs`), { resturant: resturantName, tableno: request.params.tableno, menu });
+  response.render(path.join(`${__dirname}/customermenu.ejs`), {
+    resturant: resturantName, tableno: request.params.tableno, order: request.session.order, menu,
+  });
 };
 
 exports.additem = async (request, response) => {
-    if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
-        const index = request.params.itemno;
+  if (request.session.loggedin
+      && request.session.tableno === request.params.tableno
+      && request.session.fssai === request.params.fssai) {
+    const index = request.params.itemno;
     if (request.session.order.orderdetails[`${index}`] == null) {
       request.session.order.ordercount += 1;
       request.session.order.orderdetails[`${index}`] = {};
       request.session.order.orderdetails[`${index}`].name = menu[index].foodName;
-        request.session.order.orderdetails[`${index}`].price = menu[index].price;
+      request.session.order.orderdetails[`${index}`].price = menu[index].price;
       request.session.order.orderdetails[`${index}`].qty = 1;
     } else {
       request.session.order.orderdetails[`${index}`].qty += 1;
+    }
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/menu`);
+    response.end();
+  } else {
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+    response.end();
+  }
+};
+exports.removeitem = async (request, response) => {
+  if (request.session.loggedin
+      && request.session.tableno === request.params.tableno
+      && request.session.fssai === request.params.fssai) {
+    const index = request.params.itemno;
+    if (request.session.order.orderdetails[`${index}`] != null) {
+      request.session.order.orderdetails[`${index}`].qty -= 1;
     }
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/menu`);
     response.end();

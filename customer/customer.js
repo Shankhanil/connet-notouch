@@ -27,5 +27,7 @@ router.get('/:fssai/:tableno/menu', customermethod.menuRedirect);
 router.get('/:fssai/:tableno/additem/:itemno', customermethod.additem);
 router.post('/:fssai/:tableno/additem/:itemno', customermethod.additem);
 
+router.get('/:fssai/:tableno/removeitem/:itemno', customermethod.removeitem);
+router.post('/:fssai/:tableno/removeitem/:itemno', customermethod.removeitem);
 
 module.exports = router;
