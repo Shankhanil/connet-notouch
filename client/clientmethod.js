@@ -42,3 +42,11 @@ exports.clienthome = async (request, response) => {
     response.end();
   }
 };
+
+exports.end = async (request, response) => {
+  if (request.session.loggedin && request.session.username === 'client') {
+    request.session.destroy();
+  }
+  response.redirect('/client/clientauth');
+  response.end();
+};

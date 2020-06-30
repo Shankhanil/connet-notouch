@@ -12,19 +12,7 @@ router.get('/clientauth', async (request, response) => {
 router.post('/clientauth', clientmethod.authpost);
 router.get('/clienthome', clientmethod.clienthome);
 
-router.get('/end', async (request, response) => {
-  if (request.session.loggedin && request.session.username === 'client') {
-    request.session.destroy();
-  }
-  response.redirect('/client/clientauth');
-  response.end();
-});
-router.post('/end', async (request, response) => {
-  if (request.session.loggedin && request.session.username === 'client') {
-    request.session.destroy();
-  }
-  response.redirect('/client/clientauth');
-  response.end();
-});
+router.get('/end', clientmethod.end);
+router.post('/end', clientmethod.end);
 
 module.exports = router;

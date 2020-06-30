@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="invoice-title">
-                        <h2>Bill</h2><h3 class="pull-right">Order # </h3>
+                        <h2>Bill</h2><h3 class="pull-right">Order # <%= order.orderid %> </h3>
                     </div>
                     <hr>
                     <div class="row">
@@ -28,9 +28,10 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Order summary</strong></h3>
+                            <h3 class="panel-title"><strong>Menu</strong></h3>
                         </div>
                         <div class="panel-body">
+                        <form method="post">
                             <div class="table-responsive">
                                 <table class="table table-condensed">
                                     <thead>
@@ -47,15 +48,21 @@
                                             <td><%= menu[i].foodName%></td>
                                             <td class="text-center"><%= menu[i].price %></td>
                                             <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-right"><button>+</button><button>-</button></td>
-                                            <td class="text-right">0</td>
+                                            <td class="text-right"><button formaction='additem/<%=i%>'>+</button></td>
+                                            <% if (order.orderdetails[i]) { %>
+                                                
+                                            <td class="text-right"> <%= order.orderdetails[i].qty %> </td>
+                                            <% } else { %>
+                                            <td class="text-right"> <%= 0 %> </td>
+                                            <% } %>
+
+                                            <td class="text-right"><button formaction='removeitem/<%=i%>'>-</button></td>
                                         </tr>
                                         <% } %>
                                     </tbody>
                                 </table>
                             </div>
-                            <form method="post">
-                                <button formaction="order"> Order </button>
+                            <button formaction="order"> Order </button>
                             </form>
                         </div>
                     </div>

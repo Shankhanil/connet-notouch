@@ -45,16 +45,18 @@
                                         <% for (var key in order.orderdetails) { %>
                                         <tr>
                                             <td><%= order.orderdetails[key].name%></td>
-                                            <td class="text-center">Rs 20</td>
+                                            <td class="text-center"><%= order.orderdetails[key].price %></td>
                                             <td class="text-center"><%= order.orderdetails[key].qty %></td>
-                                            <td class="text-right"><%= bill %></td>
+                                            <td class="text-right"><%= order.orderdetails[key].price*order.orderdetails[key].qty %></td>
                                         </tr>
                                         <% } %>
                                     </tbody>
                                 </table>
                             </div>
                             <form method="post">
+                                <label class = "text-right"> Total: Rs. <%= bill %></label><br>
                                 <button formaction="end"> Pay bill </button>
+                                <button formaction="order"> Go back </button>
                             </form>
                         </div>
                     </div>
