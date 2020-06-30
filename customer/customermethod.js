@@ -96,16 +96,9 @@ exports.getorder = async (request, response) => {
 exports.postorder = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
-    if (request.session.order.orderdetails.item == null) {
-      request.session.order.ordercount += 1;
-      request.session.order.orderdetails.item = {};
-      request.session.order.orderdetails.item.name = 'Naan';
-      request.session.order.orderdetails.item.qty = 1;
-    } else {
-      request.session.order.orderdetails.item.qty += 1;
-    }
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/order`);
     response.end();
+//      console.log(request.session.order);
   } else {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
     response.end();
@@ -135,4 +128,24 @@ exports.generatebill = async (request, response) => {
 
 exports.menuRedirect = async (request, response) => {
   response.render(path.join(`${__dirname}/customermenu.ejs`), { resturant: resturantName, tableno: request.params.tableno, menu });
+};
+
+exports.additem = async (request, response) => {
+    if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
+        const index = request.params.itemno;
+    if (request.session.order.orderdetails[`${index}`] == null) {
+      request.session.order.ordercount += 1;
+      request.session.order.orderdetails[`${index}`] = {};
+      request.session.order.orderdetails[`${index}`].name = menu[index].foodName;
+        request.session.order.orderdetails[`${index}`].price = menu[index].price;
+      request.session.order.orderdetails[`${index}`].qty = 1;
+    } else {
+      request.session.order.orderdetails[`${index}`].qty += 1;
+    }
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/menu`);
+    response.end();
+  } else {
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+    response.end();
+  }
 };

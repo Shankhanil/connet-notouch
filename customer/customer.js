@@ -24,4 +24,8 @@ router.get('/:fssai/:tableno/bill', customermethod.generatebill);
 router.post('/:fssai/:tableno/menu', customermethod.menuRedirect);
 router.get('/:fssai/:tableno/menu', customermethod.menuRedirect);
 
+router.get('/:fssai/:tableno/additem/:itemno', customermethod.additem);
+router.post('/:fssai/:tableno/additem/:itemno', customermethod.additem);
+
+
 module.exports = router;

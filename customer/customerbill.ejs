@@ -45,9 +45,9 @@
                                         <% for (var key in order.orderdetails) { %>
                                         <tr>
                                             <td><%= order.orderdetails[key].name%></td>
-                                            <td class="text-center">Rs 20</td>
+                                            <td class="text-center"><%= order.orderdetails[key].price %></td>
                                             <td class="text-center"><%= order.orderdetails[key].qty %></td>
-                                            <td class="text-right"><%= bill %></td>
+                                            <td class="text-right"><%= order.orderdetails[key].price*order.orderdetails[key].qty %></td>
                                         </tr>
                                         <% } %>
                                     </tbody>

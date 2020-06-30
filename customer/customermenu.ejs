@@ -31,6 +31,7 @@
                             <h3 class="panel-title"><strong>Order summary</strong></h3>
                         </div>
                         <div class="panel-body">
+                        <form method="post">
                             <div class="table-responsive">
                                 <table class="table table-condensed">
                                     <thead>
@@ -47,15 +48,14 @@
                                             <td><%= menu[i].foodName%></td>
                                             <td class="text-center"><%= menu[i].price %></td>
                                             <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-right"><button>+</button><button>-</button></td>
+                                            <td class="text-right"><button formaction='additem/<%=i%>'>+</button><button>-</button></td>
                                             <td class="text-right">0</td>
                                         </tr>
                                         <% } %>
                                     </tbody>
                                 </table>
                             </div>
-                            <form method="post">
-                                <button formaction="order"> Order </button>
+                            <button formaction="order"> Order </button>
                             </form>
                         </div>
                     </div>
