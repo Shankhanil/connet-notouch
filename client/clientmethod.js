@@ -11,7 +11,7 @@ exports.authpost = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'client') {
     response.redirect('/client/clienthome');
   } else {
-    const sql = 'SELECT name, password, fssai FROM Client where fssai = ?';
+    const sql = 'SELECT name, password, fssai FROM client where fssai = ? and active=1';
     const vars = [fssaiCode];
     const query = con.query({
       sql,
