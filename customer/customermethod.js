@@ -110,7 +110,7 @@ exports.generatebill = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
     let bill = 0;
-    for (const key in Object.keys(request.session.order.orderdetails)) {
+    for (var key in request.session.order.orderdetails) {
         bill += request.session.order.orderdetails[key].qty
             * request.session.order.orderdetails[key].price;
     }
