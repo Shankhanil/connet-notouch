@@ -30,4 +30,10 @@ router.post('/:fssai/:tableno/additem/:itemno', customermethod.additem);
 router.get('/:fssai/:tableno/removeitem/:itemno', customermethod.removeitem);
 router.post('/:fssai/:tableno/removeitem/:itemno', customermethod.removeitem);
 
+router.get('/:fssai/:tableno/place', customermethod.placeorder);
+router.post('/:fssai/:tableno/place', customermethod.placeorder);
+
+router.get('/:fssai/:tableno/pay', customermethod.requestbill);
+router.post('/:fssai/:tableno/pay', customermethod.requestbill);
+
 module.exports = router;

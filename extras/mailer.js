@@ -37,3 +37,45 @@ exports.mailClient = function mailClient(clientMail, { fssaiCode, password }, is
     }
   });
 };
+
+exports.mailOrder = function mailOrder(clientMail, order, tableno) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'shankha.rik@gmail.com',
+      pass: 'mdxxyfackltvslpg',
+    },
+  });
+  const mailOptions = {
+    from: 'shankha.rik@gmail.com',
+    to: clientMail,
+    subject: `Order from table ${tableno}`,
+    text: order,
+  };
+  transporter.sendMail(mailOptions, (error) => {
+    if (error) {
+      // do somethingggggg
+    }
+  });
+};
+
+exports.mailBill = function mailBill(clientMail, message, tableno) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'shankha.rik@gmail.com',
+      pass: 'mdxxyfackltvslpg',
+    },
+  });
+  const mailOptions = {
+    from: 'shankha.rik@gmail.com',
+    to: clientMail,
+    subject: `Bill for table ${tableno}`,
+    text: message,
+  };
+  transporter.sendMail(mailOptions, (error) => {
+    if (error) {
+      // do somethingggggg
+    }
+  });
+};
