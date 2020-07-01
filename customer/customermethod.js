@@ -111,10 +111,8 @@ exports.generatebill = async (request, response) => {
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
     let bill = 0;
     for (const key in Object.keys(request.session.order.orderdetails)) {
-      if (request.session.order.orderdetails[key]) {
         bill += request.session.order.orderdetails[key].qty
             * request.session.order.orderdetails[key].price;
-      }
     }
     request.session.order.orderbill = bill;
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
