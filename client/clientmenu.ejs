@@ -10,17 +10,9 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="invoice-title">
-                        <h2>Bill</h2><h3 class="pull-right">Order # <%= order.orderid %> </h3>
+                        <h2><%= client %></h2><br><br>
                     </div>
                     <hr>
-                    <div class="row">
-                        <div class="col-xs-6 text-right">
-                            <address>
-                                <strong>Order Date:</strong><br>
-                                <strong></strong><br><br>
-                            </address>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -39,7 +31,6 @@
                                             <td><strong>Item</strong></td>
                                             <td class="text-center"><strong>Price</strong></td>
                                             <td class="text-center"><strong>Quantity</strong></td>
-                                            <td class="text-right"><strong> <%= menu.length %> </strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -48,22 +39,12 @@
                                             <td><%= menu[i].foodName%></td>
                                             <td class="text-center"><%= menu[i].price %></td>
                                             <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-right"><button formaction='additem/<%=i%>'>+</button></td>
-                                            <% if (order.orderdetails[i]) { %>
-                                                
-                                            <td class="text-right"> <%= order.orderdetails[i].qty %> </td>
-                                            <% } else { %>
-                                            <td class="text-right"> <%= 0 %> </td>
-                                            <% } %>
-
-                                            <td class="text-right"><button formaction='removeitem/<%=i%>'>-</button></td>
+                                            <td class="text-center"> <button>Deactivate</button> </td>
                                         </tr>
                                         <% } %>
                                     </tbody>
                                 </table>
                             </div>
-                            <label class="pull-right"> Total Rs. <%= orderbill %> </label>
-                            <button class="pull-right" formaction="order"> Order </button>
                             </form>
                         </div>
                     </div>

@@ -10,9 +10,13 @@ router.get('/clientauth', async (request, response) => {
 });
 
 router.post('/clientauth', clientmethod.authpost);
-router.get('/clienthome', clientmethod.clienthome);
+router.get('/:fssaiCode/clienthome', clientmethod.clienthome);
+router.post('/:fssaiCode/clienthome', clientmethod.clienthome);
 
-router.get('/end', clientmethod.end);
-router.post('/end', clientmethod.end);
+router.get('/:fssaiCode/end', clientmethod.end);
+router.post('/:fssaiCode/end', clientmethod.end);
+
+router.get('/:fssaiCode/menu', clientmethod.updatemenu);
+router.post('/:fssaiCode/menu', clientmethod.updatemenu);
 
 module.exports = router;
