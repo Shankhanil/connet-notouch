@@ -98,11 +98,18 @@ exports.status = async (request, response) => {
 exports.end = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
-    request.session.destroy();
-    menu = [];
+    if (request.session.order.orderstatus === 'placed') {
+      response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+    } else {
+      request.session.destroy();
+      menu = [];
+      response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+      response.end();
+    }
+  } else {
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+    response.end();
   }
-  response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
-  response.end();
 };
 
 exports.getorder = async (request, response) => {
@@ -131,8 +138,10 @@ exports.generatebill = async (request, response) => {
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
     let bill = 0;
     for (const key in request.session.order.orderdetails) {
-      bill += request.session.order.orderdetails[key].qty
+      if (request.session.order.orderdetails[key]) {
+        bill += request.session.order.orderdetails[key].qty
             * request.session.order.orderdetails[key].price;
+      }
     }
     request.session.order.orderbill = bill;
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
@@ -180,7 +189,8 @@ exports.removeitem = async (request, response) => {
       && request.session.tableno === request.params.tableno
       && request.session.fssai === request.params.fssai) {
     const index = request.params.itemno;
-    if (request.session.order.orderdetails[`${index}`] != null) {
+    if (request.session.order.orderdetails[`${index}`] != null && 
+        request.session.order.orderdetails[`${index}`].qty >= 1) {
       request.session.order.orderdetails[`${index}`].qty -= 1;
     }
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/menu`);
@@ -194,7 +204,9 @@ exports.removeitem = async (request, response) => {
 exports.placeorder = async (request, response) => {
   let message = '';
   for (const key in request.session.order.orderdetails) {
-    message += `Item: ${request.session.order.orderdetails[key].name}---${request.session.order.orderdetails[key].qty} \n`;
+    if (request.session.order.orderdetails[key]) {
+      message += `Item: ${request.session.order.orderdetails[key].name}---${request.session.order.orderdetails[key].qty} \n`;
+    }
   }
   mailer.mailOrder(clientMail, message, request.params.tableno);
   request.session.order.orderstatus = 'placed';
@@ -206,6 +218,6 @@ exports.placeorder = async (request, response) => {
 exports.requestbill = async (request, response) => {
   const message = `Please send bill to table ${request.params.tableno}. Total bill is Rs. ${request.session.order.orderbill} `;
   mailer.mailBill(clientMail, message, request.params.tableno);
-  request.session.order.status = 'billed';
+  request.session.order.orderstatus = 'billed';
   response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/end`);
 };

@@ -44,10 +44,12 @@
                                     <tbody>
                                         <% for (var key in order.orderdetails) { %>
                                         <tr>
+                                            <% if (order.orderdetails[key].qty > 0){ %>
                                             <td><%= order.orderdetails[key].name%></td>
                                             <td class="text-center"><%= order.orderdetails[key].price %></td>
                                             <td class="text-center"><%= order.orderdetails[key].qty %></td>
                                             <td class="text-right"><%= order.orderdetails[key].price*order.orderdetails[key].qty %></td>
+                                            <% } %>
                                         </tr>
                                         <% } %>
                                     </tbody>

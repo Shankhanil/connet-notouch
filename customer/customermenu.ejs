@@ -10,17 +10,9 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="invoice-title">
-                        <h2>Bill</h2><h3 class="pull-right">Order # <%= order.orderid %> </h3>
+                        <h2><%= resturant %></h2><h3 class="pull-right">Order # <%= order.orderid %> </h3>
                     </div>
                     <hr>
-                    <div class="row">
-                        <div class="col-xs-6 text-right">
-                            <address>
-                                <strong>Order Date:</strong><br>
-                                <strong></strong><br><br>
-                            </address>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -39,7 +31,6 @@
                                             <td><strong>Item</strong></td>
                                             <td class="text-center"><strong>Price</strong></td>
                                             <td class="text-center"><strong>Quantity</strong></td>
-                                            <td class="text-right"><strong> <%= menu.length %> </strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,10 +50,17 @@
                                             <td class="text-right"><button formaction='removeitem/<%=i%>'>-</button></td>
                                         </tr>
                                         <% } %>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><button class="pull-right" formaction="order"> Order </button></td>
+                                            <td><button class="pull-right" formaction="begin"> Go back </button></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <button class="pull-right" formaction="order"> Order </button>
                             </form>
                         </div>
                     </div>
