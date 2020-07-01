@@ -4,7 +4,7 @@ const misc = require('../extras/misc');
 // const io = require('../socket');
 
 const { con } = db;
-const menu = [];
+let menu = [];
 let resturantName;
 
 exports.home = async (request, response) => {
@@ -25,17 +25,17 @@ exports.home = async (request, response) => {
     query.on('result', (result) => {
     //    menu.push(result);
       resturantName = result.name;
-      //      if (menu.length === 0) {
-      sql = `Select foodName, price, qty from menu_basic_${request.params.fssai} where acive=1`;
-      query = con.query({
-        sql,
-        timeout: 10000,
-      });
+      if (menu.length === 0) {
+        sql = `Select foodName, price, qty from menu_basic_${request.params.fssai} where acive=1`;
+        query = con.query({
+          sql,
+          timeout: 10000,
+        });
 
-      query.on('result', (res) => {
-        menu.push(res);
-      });
-      //      }
+        query.on('result', (res) => {
+          menu.push(res);
+        });
+      }
       response.render(path.join(`${__dirname}/customerhome.ejs`), { resturant: resturantName, tableno: request.params.tableno });
     });
   }
@@ -78,6 +78,7 @@ exports.end = async (request, response) => {
   // eslint-disable-next-line max-len
   if (request.session.loggedin && request.session.tableno === request.params.tableno && request.session.fssai === request.params.fssai) {
     request.session.destroy();
+    menu = [];
   }
   response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
   response.end();
