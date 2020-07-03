@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="invoice-title">
-                        <h2><%= resturant %></h2><h3 class="pull-right">Order # <%= order.orderid %> </h3>
+                        <h2><%= resturant %></h2><h3 class="pull-right">Order # </h3>
                     </div>
                     <hr>
                 </div>
@@ -28,26 +28,18 @@
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <td><strong>Item</strong></td>
-                                            <td class="text-center"><strong>Price</strong></td>
+                                            <td><strong>Table number</strong></td>
+                                            <td class="text-center"><strong>Name</strong></td>
                                             <td class="text-center"><strong>Quantity</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% for (var i = 0; i<menu.length; i++) { %>
+                                        <% for (var i = 0; i<paymenthist.length; i++) { %>
                                         <tr>
-                                            <td><%= menu[i].foodName%></td>
-                                            <td class="text-center"><%= menu[i].price %></td>
-                                            <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-right"><button formaction='additem/<%=i%>'>+</button></td>
-                                            <% if (order.orderdetails[i]) { %>
-                                                
-                                            <td class="text-right"> <%= order.orderdetails[i].qty %> </td>
-                                            <% } else { %>
-                                            <td class="text-right"> <%= 0 %> </td>
-                                            <% } %>
-
-                                            <td class="text-right"><button formaction='removeitem/<%=i%>'>-</button></td>
+                                            <td><%= paymenthist[i].orderid%></td>
+                                            <td class="text-center"><%= paymenthist[i].amount %></td>
+                                            <td class="text-center"><button disabled>Paid</button></td>
+                                            
                                         </tr>
                                         <% } %>
                                         <tr>
@@ -55,7 +47,8 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td><button class="pull-right" formaction="order"> OKAY </button></td>
+                                            <td><button class="pull-right" formaction="clienthome"> Go back </button></td>
+                                            <td><button class="pull-right" formaction="paymenthist"> Refresh </button></td>
                                         </tr>
                                     </tbody>
                                 </table>

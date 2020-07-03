@@ -7,6 +7,7 @@ const { con } = db;
 let menu = [];
 let resturantName;
 let clientMail;
+let orderid  = 0;
 
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
@@ -71,7 +72,7 @@ exports.begin = async (request, response) => {
     request.session.tableno = request.params.tableno;
     request.session.fssai = request.params.fssai;
     request.session.order = {
-      orderid: 1,
+      orderid: orderid +1,
       orderstatus: 'order',
       orderdate: request.session.date = misc.today(),
       ordercount: 0,
@@ -82,6 +83,7 @@ exports.begin = async (request, response) => {
       resturant: resturantName, tableno: request.params.tableno, order: request.session.order, menu,
     });
   }
+    orderid+=1;
   response.end();
 };
 
@@ -204,7 +206,7 @@ exports.removeitem = async (request, response) => {
 exports.placeorder = async (request, response) => {
   const message = '';
   for (const key in request.session.order.orderdetails) {
-    if (request.session.order.orderdetails[key] && request.session.order.orderdetails[key].qty>0) {
+    if (request.session.order.orderdetails[key] && request.session.order.orderdetails[key].qty > 0) {
       //      message += `Item: ${request.session.order.orderdetails[key].name}---${request.session.order.orderdetails[key].qty} \n`;
       const sql = `insert into order_${request.params.fssai} (tableno, item, qty) values (?,?,?)`;
       const vars = [request.params.tableno, request.session.order.orderdetails[key].name, request.session.order.orderdetails[key].qty];
@@ -214,7 +216,7 @@ exports.placeorder = async (request, response) => {
       }, vars);
     }
   }
-//  mailer.mailOrder(clientMail, message, request.params.tableno);
+  //  mailer.mailOrder(clientMail, message, request.params.tableno);
   request.session.order.orderstatus = 'placed';
   response.render(path.join(`${__dirname}/customerpayment.ejs`), {
     resturant: resturantName, tableno: request.params.tableno, bill: request.session.order.orderbill,
@@ -225,5 +227,18 @@ exports.requestbill = async (request, response) => {
   const message = `Please send bill to table ${request.params.tableno}. Total bill is Rs. ${request.session.order.orderbill} `;
   mailer.mailBill(clientMail, message, request.params.tableno);
   request.session.order.orderstatus = 'billed';
+  const sql = `delete from order_${request.params.fssai} where tableno = ?`;
+  const vars = [request.params.tableno];
+  const query = con.query({
+    sql,
+    timeout: 10000,
+  }, vars);
+    
+    const sql2 = `insert into payment_${request.params.fssai} (orderid, amount) values (?, ?)`;
+    const vars2 = [request.session.order.orderid, request.session.order.orderbill];
+    const query2 = con.query({
+        sql: sql2,
+        timeout:10000
+    }, vars2);
   response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/end`);
 };
