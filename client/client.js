@@ -19,4 +19,10 @@ router.post('/:fssaiCode/end', clientmethod.end);
 router.get('/:fssaiCode/menu', clientmethod.updatemenu);
 router.post('/:fssaiCode/menu', clientmethod.updatemenu);
 
+router.get('/:fssaiCode/order', clientmethod.getorders);
+router.post('/:fssaiCode/order', clientmethod.getorders);
+
+router.get('/:fssaiCode/delivered/:orderid', clientmethod.delivered);
+router.post('/:fssaiCode/delivered/:orderid', clientmethod.delivered);
+
 module.exports = router;

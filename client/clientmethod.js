@@ -4,6 +4,7 @@ const db = require('../dbconfig');
 const { con } = db;
 let resturantName;
 let menu = [];
+var orders = new Array(), count=0;
 exports.authpost = async (request, response) => {
   const { fssaiCode } = request.body;
   const { password } = request.body;
@@ -72,3 +73,37 @@ exports.updatemenu = async (request, response) => {
     response.end();
   }
 };
+
+exports.getorders = async(request, response)=>{
+    count+= 1;
+    const sql = `SELECT tableno, item, qty FROM order_${request.params.fssaiCode} WHERE active = 0 ORDER BY tableno`;
+    const query = con.query({
+      sql,
+      timeout: 10000,
+    });
+    query.on('result', (res) => {
+          orders.push(res);
+    });
+    setTimeout(() =>{ response.render(path.join(`${__dirname}/clientorders.ejs`), { resturant: resturantName, tableno: request.params.tableno, orders, count}); }, 1000);
+//    response.render(path.join(`${__dirname}/clientorders.ejs`), { resturant: resturantName, tableno: request.params.tableno, orders, count});
+//    console.log(request.originalUrl);
+    
+    orders.length = 0;
+    setTimeout(() =>{ response.get(request.originalUrl); }, 2000);
+};
+
+exports.delivered = async(request, response)=>{
+    console.log(orders[`${request.params.orderid}`].tableno);
+//    console.log(request.originalUrl);
+    
+    const sql = `UPDATE order_${request.params.fssaiCode} SET active = 1 where tableno = ? and item = ? and qty = ?`;
+    const vars = [orders[`${request.params.orderid}`].tableno, orders[`${request.params.orderid}`].item, orders[`${request.params.orderid}`].qty];
+    const query = con.query({
+      sql,
+      timeout: 10000,
+    }, vars);
+    query.on('result', (res) => {
+          setTimeout(() =>{ response.redirect(`/client/${request.params.fssaiCode}/order`);}, 200);
+    });
+};
+

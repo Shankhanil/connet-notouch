@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <!------ Include the above in your HEAD tag ---------->
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="invoice-title">
+                        <h2><%= resturant %></h2><h3 class="pull-right">Order # <%= count %> </h3>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><strong>Menu</strong></h3>
+                        </div>
+                        <div class="panel-body">
+                        <form method="post">
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <td><strong>Table number</strong></td>
+                                            <td class="text-center"><strong>Name</strong></td>
+                                            <td class="text-center"><strong>Quantity</strong></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (var i = 0; i<orders.length; i++) { %>
+                                        <tr>
+                                            <td><%= orders[i].tableno%></td>
+                                            <td class="text-center"><%= orders[i].item %></td>
+                                            <td class="text-center"><%= orders[i].qty %></td>
+                                            <td class="text-center"><button formaction="delivered/<%=i%>">Delivered</button></td>
+                                            
+                                        </tr>
+                                        <% } %>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><button class="pull-right" formaction="clienthome"> Go back </button></td>
+                                            <td><button class="pull-right" formaction="order"> Refresh </button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

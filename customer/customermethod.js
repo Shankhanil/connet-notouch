@@ -189,8 +189,8 @@ exports.removeitem = async (request, response) => {
       && request.session.tableno === request.params.tableno
       && request.session.fssai === request.params.fssai) {
     const index = request.params.itemno;
-    if (request.session.order.orderdetails[`${index}`] != null && 
-        request.session.order.orderdetails[`${index}`].qty >= 1) {
+    if (request.session.order.orderdetails[`${index}`] != null
+        && request.session.order.orderdetails[`${index}`].qty >= 1) {
       request.session.order.orderdetails[`${index}`].qty -= 1;
     }
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/menu`);
@@ -202,13 +202,19 @@ exports.removeitem = async (request, response) => {
 };
 
 exports.placeorder = async (request, response) => {
-  let message = '';
+  const message = '';
   for (const key in request.session.order.orderdetails) {
-    if (request.session.order.orderdetails[key]) {
-      message += `Item: ${request.session.order.orderdetails[key].name}---${request.session.order.orderdetails[key].qty} \n`;
+    if (request.session.order.orderdetails[key] && request.session.order.orderdetails[key].qty>0) {
+      //      message += `Item: ${request.session.order.orderdetails[key].name}---${request.session.order.orderdetails[key].qty} \n`;
+      const sql = `insert into order_${request.params.fssai} (tableno, item, qty) values (?,?,?)`;
+      const vars = [request.params.tableno, request.session.order.orderdetails[key].name, request.session.order.orderdetails[key].qty];
+      const query = con.query({
+        sql,
+        timeout: 10000,
+      }, vars);
     }
   }
-  mailer.mailOrder(clientMail, message, request.params.tableno);
+//  mailer.mailOrder(clientMail, message, request.params.tableno);
   request.session.order.orderstatus = 'placed';
   response.render(path.join(`${__dirname}/customerpayment.ejs`), {
     resturant: resturantName, tableno: request.params.tableno, bill: request.session.order.orderbill,
