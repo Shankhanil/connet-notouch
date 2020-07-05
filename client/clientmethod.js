@@ -115,7 +115,7 @@ exports.delivered = async (request, response) => {
 };
 
 exports.paymenthistory = async (request, response) => {
-  const sql = `SELECT orderdate, orderid, amount FROM payment_${request.params.fssaiCode} group by orderdate`;
+  const sql = `SELECT orderdate, orderid, amount FROM payment_${request.params.fssaiCode} order by orderdate`;
   const query = con.query({
     sql,
     timeout: 10000,
