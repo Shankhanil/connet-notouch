@@ -58,7 +58,7 @@ exports.registerClient = async (request, response) => {
     query.on('result', () => {
       const createTableSQL = `CREATE TABLE menu_basic_${fssaiCode} (foodID integer AUTO_INCREMENT, foodName varchar(100) not NULL, qty varchar (10), isVeg varchar(7) default 'non veg', price integer not NULL, acive bool not null default 1, primary key(foodID))`;
       const createOrderSQL = `CREATE TABLE IF NOT EXISTS order_${fssaiCode} ( tableno int(11) DEFAULT NULL, item varchar(100) DEFAULT NULL, qty int(11) DEFAULT NULL, active tinyint(1) DEFAULT '0')`;
-      const createPaymentSQL = `CREATE TABLE IF NOT EXISTS payment_${fssaiCode} ( orderID int(11) not NULL, amount int(11) not NULL, isbilled tinyint(1) DEFAULT '0')`;
+      const createPaymentSQL = `CREATE TABLE IF NOT EXISTS payment_${fssaiCode} ( orderID int(11) not NULL, amount int(11) not NULL, isbilled tinyint(1) DEFAULT '0', tableno int not null)`;
       const query2 = con.query({
         sql: createTableSQL,
         timeout: 10000,

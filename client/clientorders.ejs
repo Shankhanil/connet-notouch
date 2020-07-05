@@ -69,7 +69,7 @@
                                                 <table class="table table-condensed">
                                                     <thead>
                                                         <tr>
-                                                            <td><strong>Order number</strong></td>
+                                                            <td><strong>Table number</strong></td>
                                                             <td class="text-center"><strong>Amount</strong></td>
                                                             <td class="text-center"><strong>Date</strong></td>
                                                         </tr>
@@ -77,7 +77,7 @@
                                                     <% if (unpaidbills.length > 0 ){ %>
                                                     <% for (var i = 0; i<unpaidbills.length; i++) { %>
                                                     <tr>
-                                                        <td><%= unpaidbills[i].orderID %></td>
+                                                        <td><%= unpaidbills[i].tableno %></td>
                                                         <td class="text-center"><%= unpaidbills[i].amount %></td>
                                                         <td class="text-center"><%= unpaidbills[i].orderdate %></td>
                                                         <td class="text-center"><button formaction="paid/<%=i%>">Paid</button></td>

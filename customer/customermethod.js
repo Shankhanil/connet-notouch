@@ -1,12 +1,11 @@
 const path = require('path');
 const config = require('../config');
 const misc = require('../extras/misc');
-const mailer = require('../extras/mailer');
 
 const { con, sgst, cgst } = config;
 let menu = [];
-let resturantName;
-let clientMail;
+let resturantName; let
+  gstin;
 let orderid = 0;
 
 exports.home = async (request, response) => {
@@ -28,7 +27,7 @@ exports.home = async (request, response) => {
       bill: request.session.order.orderbill,
     });
   } else {
-    let sql = 'Select name, email from client where fssai=? and active = 1';
+    let sql = 'Select name, gst from client where fssai=? and active = 1';
     const vars = [request.params.fssai];
     let query = con.query({
       sql,
@@ -38,7 +37,7 @@ exports.home = async (request, response) => {
     query.on('result', (result) => {
     //    menu.push(result);
       resturantName = result.name;
-      clientMail = result.email;
+      gstin = result.gst;
       if (menu.length === 0) {
         sql = `Select foodName, price, qty from menu_basic_${request.params.fssai} where acive=1`;
         query = con.query({
@@ -156,7 +155,9 @@ exports.generatebill = async (request, response) => {
             * request.session.order.orderdetails[key].price;
       }
     }
-    request.session.order.orderbill = bill;
+    const sgstamt = (sgst / 100) * bill;
+    const cgstamt = (cgst / 100) * bill;
+    request.session.order.orderbill = Math.ceil(bill + sgstamt + cgstamt);
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
       resturant: resturantName,
       tableno: request.params.tableno,
@@ -165,6 +166,9 @@ exports.generatebill = async (request, response) => {
       date: request.session.date,
       sgst,
       cgst,
+      sgstamt,
+      cgstamt,
+      gstin,
     });
   } else {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
@@ -243,14 +247,13 @@ exports.placeorder = async (request, response) => {
 };
 
 exports.requestbill = async (request, response) => {
-  const message = `Please send bill to table ${request.params.tableno}. Total bill is Rs. ${request.session.order.orderbill} `;
-  mailer.mailBill(clientMail, message, request.params.tableno);
   request.session.order.orderstatus = 'billed';
-  const sql2 = `insert into payment_${request.params.fssai} (orderid, amount, orderdate) values (?, ?, ?)`;
-  const vars2 = [request.session.order.orderid, 
-                 request.session.order.orderbill,
-                 request.session.order.orderdate
-                ];
+  const sql2 = `insert into payment_${request.params.fssai} (orderid, amount, orderdate, tableno) values (?, ?, ?, ?)`;
+  const vars2 = [request.session.order.orderid,
+    request.session.order.orderbill,
+    request.session.order.orderdate,
+    request.params.tableno,
+  ];
   const query2 = con.query({
     sql: sql2,
     timeout: 10000,

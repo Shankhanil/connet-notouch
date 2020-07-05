@@ -4,9 +4,9 @@ const config = require('../config');
 const { con } = config;
 let resturantName;
 let menu = [];
-const orders = []; const
-  count = 0;
-const paymenthist = [], unpaidbills = [];
+const orders = [];
+const paymenthist = []; const
+  unpaidbills = [];
 
 exports.authpost = async (request, response) => {
   const { fssaiCode } = request.body;
@@ -94,22 +94,22 @@ exports.getorders = async (request, response) => {
   query.on('result', (res) => {
     orders.push(res);
   });
-    const sql2 = `SELECT orderID, amount, orderdate FROM payment_${request.params.fssaiCode} WHERE isbilled = 0 ORDER BY orderdate`;
+  const sql2 = `SELECT tableno, amount, orderdate FROM payment_${request.params.fssaiCode} WHERE isbilled = 0 ORDER BY orderdate`;
   const query2 = con.query({
-    sql:sql2,
+    sql: sql2,
     timeout: 10000,
   });
   query2.on('result', (res) => {
     unpaidbills.push(res);
   });
-    
+
   setTimeout(() => {
     response.render(path.join(`${__dirname}/clientorders.ejs`), {
-      resturant: resturantName, tableno: request.params.tableno, orders, datetime, unpaidbills
+      resturant: resturantName, tableno: request.params.tableno, orders, datetime, unpaidbills,
     });
   }, 1100);
   orders.length = 0;
-    unpaidbills.length =0;
+  unpaidbills.length = 0;
 };
 
 exports.delivered = async (request, response) => {
@@ -125,8 +125,10 @@ exports.delivered = async (request, response) => {
 };
 
 exports.paid = async (request, response) => {
-  const sql = `UPDATE payment_${request.params.fssaiCode} SET isbilled = 1 where orderID = ? and amount = ?`;
-  const vars = [unpaidbills[`${request.params.orderid}`].orderID, unpaidbills[`${request.params.orderid}`].amount];
+  const sql = `UPDATE payment_${request.params.fssaiCode} SET isbilled = 1 where tableno = ? and amount = ?`;
+  const vars = [unpaidbills[`${request.params.orderid}`].tableno, 
+                unpaidbills[`${request.params.orderid}`].amount,
+               ];
   const query = con.query({
     sql,
     timeout: 10000,
