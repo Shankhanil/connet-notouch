@@ -1,13 +1,12 @@
 const path = require('path');
-const db = require('../dbconfig');
+const config = require('../config');
 
-const { con } = db;
+const { con } = config;
 let resturantName;
 let menu = [];
-const orders = new Array(); const
+const orders = []; const
   count = 0;
-const paymenthist = new Array();
-
+const paymenthist = [];
 
 exports.authpost = async (request, response) => {
   const { fssaiCode } = request.body;
@@ -79,6 +78,14 @@ exports.updatemenu = async (request, response) => {
 };
 
 exports.getorders = async (request, response) => {
+  const currentdate = new Date();
+  const datetime = `${currentdate.getDate()}/${
+    currentdate.getMonth() + 1}/${
+    currentdate.getFullYear()} @ ${
+    currentdate.getHours()}:${
+    currentdate.getMinutes()}:${
+    currentdate.getSeconds()}`;
+
   const sql = `SELECT tableno, item, qty FROM order_${request.params.fssaiCode} WHERE active = 0 ORDER BY tableno`;
   const query = con.query({
     sql,
@@ -89,7 +96,7 @@ exports.getorders = async (request, response) => {
   });
   setTimeout(() => {
     response.render(path.join(`${__dirname}/clientorders.ejs`), {
-      resturant: resturantName, tableno: request.params.tableno, orders, count,
+      resturant: resturantName, tableno: request.params.tableno, orders, datetime,
     });
   }, 1000);
   orders.length = 0;
@@ -102,13 +109,13 @@ exports.delivered = async (request, response) => {
     sql,
     timeout: 10000,
   }, vars);
-  query.on('result', (res) => {
+  query.on('result', () => {
     setTimeout(() => { response.redirect(`/client/${request.params.fssaiCode}/order`); }, 200);
   });
 };
 
 exports.paymenthistory = async (request, response) => {
-  const sql = `SELECT orderid, amount FROM payment_${request.params.fssaiCode}`;
+  const sql = `SELECT orderdate, orderid, amount FROM payment_${request.params.fssaiCode} group by orderdate`;
   const query = con.query({
     sql,
     timeout: 10000,
@@ -118,7 +125,7 @@ exports.paymenthistory = async (request, response) => {
   });
   setTimeout(() => {
     response.render(path.join(`${__dirname}/clientpayment.ejs`), {
-      resturant: resturantName, tableno: request.params.tableno, paymenthist
+      resturant: resturantName, tableno: request.params.tableno, paymenthist,
     });
   }, 1000);
   paymenthist.length = 0;

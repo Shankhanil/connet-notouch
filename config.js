@@ -7,3 +7,6 @@ exports.con = mysql.createConnection({
   port: 3306,
   database: 'connetdb',
 });
+
+exports.sgst = 2.5;
+exports.cgst = 2.5;

@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="invoice-title">
-                        <h2><%= resturant %></h2><h3 class="pull-right">Order # </h3>
+                        <h2><%= resturant %></h2><h3 class="pull-right">Payment history </h3>
                     </div>
                     <hr>
                 </div>
@@ -28,18 +28,18 @@
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <td><strong>Table number</strong></td>
-                                            <td class="text-center"><strong>Name</strong></td>
-                                            <td class="text-center"><strong>Quantity</strong></td>
+                                            <td><strong>Date</strong></td>
+                                            <td class="text-center"><strong>OrderNo</strong></td>
+                                            <td class="text-center"><strong>Bill Amount</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <% for (var i = 0; i<paymenthist.length; i++) { %>
                                         <tr>
-                                            <td><%= paymenthist[i].orderid%></td>
+                                            <td><%= paymenthist[i].orderdate%></td>
+                                            <td class = "text-center"><%= paymenthist[i].orderid%></td>
                                             <td class="text-center"><%= paymenthist[i].amount %></td>
                                             <td class="text-center"><button disabled>Paid</button></td>
-                                            
                                         </tr>
                                         <% } %>
                                         <tr>

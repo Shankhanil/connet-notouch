@@ -52,11 +52,23 @@
                                             <% } %>
                                         </tr>
                                         <% } %>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right">SGST@<%=sgst%> = <%= order.orderbill*(sgst/100)%></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right">CGST@<%=cgst%> = <%= order.orderbill*(cgst/100)%></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <form method="post">
-                                <label class = "pull-right"> Total: Rs. <%= order.orderbill %></label><br>
+                                <label class = "pull-right"> Total: Rs. <%= (order.orderbill*(1+(sgst/100)+(cgst/100))).toFixed(2) %></label><br>
                                 <button formaction="place"> Confirm and Place order </button>
                                 <button formaction="order"> Go back </button>
                             </form>

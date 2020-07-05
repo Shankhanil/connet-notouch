@@ -39,9 +39,16 @@
                                             <td><%= menu[i].foodName%></td>
                                             <td class="text-center"><%= menu[i].price %></td>
                                             <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-center"> <button>Deactivate</button> </td>
+                                            <td class="text-center"> <button disabled>Deactivate</button> </td>
                                         </tr>
                                         <% } %>
+                                        <br>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-center"> <button type="submit" formaction="clienthome">Go back</button> </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

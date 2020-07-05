@@ -1,9 +1,9 @@
 const path = require('path');
-const db = require('../dbconfig');
+const config = require('../config');
 const mailer = require('../extras/mailer');
 const passwordGen = require('../extras/passwordGen');
 
-const { con } = db;
+const { con } = config;
 
 exports.authpost = async (request, response) => {
   const { password } = request.body;
@@ -38,12 +38,12 @@ exports.new = async (request, response) => {
 exports.registerClient = async (request, response) => {
   if (request.session.loggedin && request.session.username === 'admin') {
     const {
-      fssaiCode, resturantName, email, phoneNumber,
+      fssaiCode, resturantName, gst, email, phoneNumber,
     } = request.body;
     const password = passwordGen.generatePassword(fssaiCode);
 
-    const sql = 'INSERT INTO client (fssai, name, email, phone, password) VALUES (?, ?, ?, ?, ?)';
-    const vars = [fssaiCode, resturantName, email, phoneNumber, password];
+    const sql = 'INSERT INTO client (fssai, name, gst, email, phone, password) VALUES (?, ?, ?, ?, ?, ?)';
+    const vars = [fssaiCode, resturantName, gst, email, phoneNumber, password];
     const query = con.query({
       sql,
       timeout: 10000,
@@ -78,10 +78,8 @@ exports.registerClient = async (request, response) => {
         sql: createPaymentSQL,
         timeout: 10000,
       });
-    });
-
-    query.on('end', () => {
-      //      con.release();
+      query3.on('result', () => {});
+      query4.on('result', () => {});
     });
   } else {
     response.redirect('/inst/instauth');
