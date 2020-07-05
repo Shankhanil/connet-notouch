@@ -25,6 +25,9 @@ router.post('/:fssaiCode/order', clientmethod.getorders);
 router.get('/:fssaiCode/delivered/:orderid', clientmethod.delivered);
 router.post('/:fssaiCode/delivered/:orderid', clientmethod.delivered);
 
+router.get('/:fssaiCode/paid/:orderid', clientmethod.paid);
+router.post('/:fssaiCode/paid/:orderid', clientmethod.paid);
+
 router.get('/:fssaiCode/paymenthist', clientmethod.paymenthistory);
 router.post('/:fssaiCode/paymenthist', clientmethod.paymenthistory);
 

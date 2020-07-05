@@ -28,33 +28,73 @@
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <td><strong>Table number</strong></td>
-                                            <td class="text-center"><strong>Name</strong></td>
-                                            <td class="text-center"><strong>Quantity</strong></td>
+                                            <td class="text-center"> <strong>Live orders</strong></td>
+                                            <td></td>
+                                            <td class="text-center"> <strong>Bill requests</strong> </td>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <% if (orders.length > 0 ){ %>
-                                            <% for (var i = 0; i<orders.length; i++) { %>
-                                            <tr>
-                                                <td><%= orders[i].tableno%></td>
-                                                <td class="text-center"><%= orders[i].item %></td>
-                                                <td class="text-center"><%= orders[i].qty %></td>
-                                                <td class="text-center"><button formaction="delivered/<%=i%>">Delivered</button></td>
+                                    <tbody>                                        
+                                        <tr>
+                                            <td>
+                                            <table class="table table-condensed" border="0">
+                                                <thead>
+                                                    <tr>
+                                                        <td><strong>Table number</strong></td>
+                                                        <td class="text-center"><strong>Name</strong></td>
+                                                        <td class="text-center"><strong>Quantity</strong></td>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <% if (orders.length > 0 ){ %>
+                                                <% for (var i = 0; i<orders.length; i++) { %>
+                                                <tr>
+                                                    <td><%= orders[i].tableno%></td>
+                                                    <td class="text-center"><%= orders[i].item %></td>
+                                                    <td class="text-center"><%= orders[i].qty %></td>
+                                                    <td class="text-center"><button formaction="delivered/<%=i%>">Delivered</button></td>
 
+                                                </tr>
+                                                <% } %>
+                                            <% } else { %>
+                                            <tr> 
+                                                <td></td>
+                                                <td class="text-left"> <h3> No live orders</h3> </td>
+                                                <td></td>
                                             </tr>
                                             <% } %>
-                                        <% } else { %>
-                                        <tr> 
+                                            </table>
+                                            </td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td> <h3> No live orders</h3> </td>
-                                        </tr>
-                                        <% } %>
+                                            <td>
+                                                <table class="table table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <td><strong>Order number</strong></td>
+                                                            <td class="text-center"><strong>Amount</strong></td>
+                                                            <td class="text-center"><strong>Date</strong></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <% if (unpaidbills.length > 0 ){ %>
+                                                    <% for (var i = 0; i<unpaidbills.length; i++) { %>
+                                                    <tr>
+                                                        <td><%= unpaidbills[i].orderID %></td>
+                                                        <td class="text-center"><%= unpaidbills[i].amount %></td>
+                                                        <td class="text-center"><%= unpaidbills[i].orderdate %></td>
+                                                        <td class="text-center"><button formaction="paid/<%=i%>">Paid</button></td>
+
+                                                    </tr>
+                                                    <% } %>
+                                                <% } else { %>
+                                                <tr> 
+                                                    <td></td>
+                                                    <td class="text-left"> <h3> No unpaid bills</h3> </td>
+                                                    <td></td>
+                                                </tr>
+                                                <% } %>
+                                            </table>
+                                        </td>
+                                        </tr>                                        
                                         <tr>
-                                            <td></td>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td><button class="pull-right" formaction="clienthome"> Go back </button></td>
