@@ -26,7 +26,7 @@ exports.authpost = async (request, response) => {
     query.on('result', (result) => {
       if (result.password === password) {
         if (menu.length === 0) {
-          const sql2 = `Select foodName, price, qty from menu_basic_${fssaiCode} where acive=1`;
+          const sql2 = `Select foodName, price, qty, category from menu_basic_${fssaiCode} where acive=1 order by category`;
           const query2 = con.query({
             sql: sql2,
             timeout: 10000,

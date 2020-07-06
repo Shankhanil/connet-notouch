@@ -40,7 +40,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <% var cat=''; %>
                                         <% for (var i = 0; i<menu.length; i++) { %>
+                                            <% if (menu[i].category != cat) {%>
+                                                <tr><td><strong> <%= menu[i].category %></strong> </td></tr>
+                                                <% cat = menu[i].category; %>
+                                            <%} %>
                                         <tr>
                                             <td><%= menu[i].foodName%></td>
                                             <td class="text-center"><%= menu[i].price %></td>
