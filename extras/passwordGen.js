@@ -15,5 +15,5 @@ function shuffle(input) {
 
 exports.generatePassword = function generatePassword(fssaiCode) {
   const shuffled = shuffle(fssaiCode);
-  return crypto.MD5(shuffled).toString();
+  return shuffled.toString();
 };
