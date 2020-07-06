@@ -221,43 +221,57 @@ exports.removeitem = async (request, response) => {
 };
 
 exports.placeorder = async (request, response) => {
-  for (const key in request.session.order.orderdetails) {
-    if (request.session.order.orderdetails[key]
+  if (request.session.loggedin
+      && request.session.tableno === request.params.tableno
+      && request.session.fssai === request.params.fssai) {
+    for (const key in request.session.order.orderdetails) {
+      if (request.session.order.orderdetails[key]
         && request.session.order.orderdetails[key].qty > 0) {
-      const sql = `insert into order_${request.params.fssai} (tableno, item, qty) values (?,?,?)`;
-      const vars = [
-        request.params.tableno,
-        request.session.order.orderdetails[key].name,
-        request.session.order.orderdetails[key].qty,
-      ];
-      const query = con.query({
-        sql,
-        timeout: 10000,
-      }, vars);
-      query.on('result', () => {});
+        const sql = `insert into order_${request.params.fssai} (tableno, item, qty) values (?,?,?)`;
+        const vars = [
+          request.params.tableno,
+          request.session.order.orderdetails[key].name,
+          request.session.order.orderdetails[key].qty,
+        ];
+        const query = con.query({
+          sql,
+          timeout: 10000,
+        }, vars);
+        query.on('result', () => {});
+      }
     }
+    //  mailer.mailOrder(clientMail, message, request.params.tableno);
+    request.session.order.orderstatus = 'placed';
+    response.render(path.join(`${__dirname}/customerpayment.ejs`), {
+      resturant: resturantName,
+      tableno: request.params.tableno,
+      bill: request.session.order.orderbill,
+    });
+  } else {
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+    response.end();
   }
-  //  mailer.mailOrder(clientMail, message, request.params.tableno);
-  request.session.order.orderstatus = 'placed';
-  response.render(path.join(`${__dirname}/customerpayment.ejs`), {
-    resturant: resturantName,
-    tableno: request.params.tableno,
-    bill: request.session.order.orderbill,
-  });
 };
 
 exports.requestbill = async (request, response) => {
-  request.session.order.orderstatus = 'billed';
-  const sql2 = `insert into payment_${request.params.fssai} (orderid, amount, orderdate, tableno) values (?, ?, ?, ?)`;
-  const vars2 = [request.session.order.orderid,
-    request.session.order.orderbill,
-    request.session.order.orderdate,
-    request.params.tableno,
-  ];
-  const query2 = con.query({
-    sql: sql2,
-    timeout: 10000,
-  }, vars2);
-  query2.on('result', () => {});
-  response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/end`);
+  if (request.session.loggedin
+      && request.session.tableno === request.params.tableno
+      && request.session.fssai === request.params.fssai) {
+    request.session.order.orderstatus = 'billed';
+    const sql2 = `insert into payment_${request.params.fssai} (orderid, amount, orderdate, tableno) values (?, ?, ?, ?)`;
+    const vars2 = [request.session.order.orderid,
+      request.session.order.orderbill,
+      request.session.order.orderdate,
+      request.params.tableno,
+    ];
+    const query2 = con.query({
+      sql: sql2,
+      timeout: 10000,
+    }, vars2);
+    query2.on('result', () => {});
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/end`);
+  } else {
+    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
+    response.end();
+  }
 };
