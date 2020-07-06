@@ -138,7 +138,7 @@ exports.addmenu = async (request, response) => {
       sql,
       timeout: 10000,
     }, vars);
-    const { foodName, foodPrice } = request.body;
+    const { foodName, foodPrice, category } = request.body;
     let {
       isVeg, qty,
     } = request.body;
@@ -150,8 +150,8 @@ exports.addmenu = async (request, response) => {
     }
     query.on('result', (result) => {
       if (foodName) {
-        const addMenuSQL = `INSERT INTO menu_basic_${fssai} (foodName, qty, isVeg, price) VALUES (?,?, ?, ?)`;
-        vars = [foodName, qty, isVeg, foodPrice];
+        const addMenuSQL = `INSERT INTO menu_basic_${fssai} (foodName, qty, isVeg, price, category) VALUES (?,?, ?, ?,?)`;
+        vars = [foodName, qty, isVeg, foodPrice, category];
 
         const query2 = con.query({
           sql: addMenuSQL,
@@ -189,7 +189,7 @@ exports.finish = async (request, response) => {
       sql,
       timeout: 10000,
     }, vars);
-    const { foodName, foodPrice } = request.body;
+    const { foodName, foodPrice, category } = request.body;
     let {
       isVeg, qty,
     } = request.body;
@@ -201,8 +201,8 @@ exports.finish = async (request, response) => {
     }
     query.on('result', () => {
       if (foodName) {
-        const addMenuSQL = `INSERT INTO menu_basic_${fssai} (foodName, qty, isVeg, price) VALUES (?,?, ?, ?)`;
-        vars = [foodName, qty, isVeg, foodPrice];
+        const addMenuSQL = `INSERT INTO menu_basic_${fssai} (foodName, qty, isVeg, price, category) VALUES (?,?,?, ?, ?)`;
+        vars = [foodName, qty, isVeg, foodPrice, category];
 
         const query2 = con.query({
           sql: addMenuSQL,

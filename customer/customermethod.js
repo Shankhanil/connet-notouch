@@ -114,7 +114,7 @@ exports.end = async (request, response) => {
       response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
     } else {
       request.session.destroy();
-      menu = [];
+      menu.length = 0;
       response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
       response.end();
     }

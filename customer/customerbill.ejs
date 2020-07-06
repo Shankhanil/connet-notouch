@@ -53,7 +53,7 @@
                                             <td><strong>Item</strong></td>
                                             <td class="text-center"><strong>Price</strong></td>
                                             <td class="text-center"><strong>Quantity</strong></td>
-                                            <td class="text-right"><strong>Totals</strong></td>
+                                            <td class="text-center"><strong>Totals</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -63,7 +63,7 @@
                                             <td><%= order.orderdetails[key].name%></td>
                                             <td class="text-center"><%= order.orderdetails[key].price %></td>
                                             <td class="text-center"><%= order.orderdetails[key].qty %></td>
-                                            <td class="text-right"><%= order.orderdetails[key].price*order.orderdetails[key].qty %></td>
+                                            <td class="text-center"><%= order.orderdetails[key].price*order.orderdetails[key].qty %></td>
                                             <% } %>
                                         </tr>
                                         <% } %>
@@ -71,13 +71,13 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td class="text-right">SGST@<%=sgst%> = <%= sgstamt %></td>
+                                            <td class="text-center">SGST@<%=sgst%> = <%= sgstamt %></td>
                                         </tr>
                                         <tr>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td class="text-right">CGST@<%=cgst%> = <%= cgstamt %></td>
+                                            <td class="text-center">CGST@<%=cgst%> = <%= cgstamt %></td>
                                         </tr>
                                     </tbody>
                                 </table>

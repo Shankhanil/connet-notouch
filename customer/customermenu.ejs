@@ -50,15 +50,15 @@
                                             <td><%= menu[i].foodName%></td>
                                             <td class="text-center"><%= menu[i].price %></td>
                                             <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-right"><button formaction='additem/<%=i%>'>+</button></td>
+                                            <td class="text-center"><button formaction='additem/<%=i%>'>+</button></td>
                                             <% if (order.orderdetails[i]) { %>
                                                 
-                                            <td class="text-right"> <%= order.orderdetails[i].qty %> </td>
+                                            <td class="text-center"> <%= order.orderdetails[i].qty %> </td>
                                             <% } else { %>
-                                            <td class="text-right"> <%= 0 %> </td>
+                                            <td class="text-center"> <%= 0 %> </td>
                                             <% } %>
 
-                                            <td class="text-right"><button formaction='removeitem/<%=i%>'>-</button></td>
+                                            <td class="text-center"><button formaction='removeitem/<%=i%>'>-</button></td>
                                         </tr>
                                         <% } %>
                                         <tr>
