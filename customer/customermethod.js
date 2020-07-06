@@ -27,6 +27,7 @@ exports.home = async (request, response) => {
       bill: request.session.order.orderbill,
     });
   } else {
+      menu.length = 0;
     let sql = 'Select name, gst from client where fssai=? and active = 1';
     const vars = [request.params.fssai];
     let query = con.query({
