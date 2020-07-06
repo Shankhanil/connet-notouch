@@ -31,7 +31,7 @@
                         <div class="panel-body">
                         <form method="post">
                             <div class="table-responsive">
-                                <table class="table table-condensed">
+                                <table class="table table-condensed" style="table-layout: fixed; width: 100%">
                                     <thead>
                                         <tr>
                                             <td><strong>Item</strong></td>
@@ -47,18 +47,18 @@
                                                 <% cat = menu[i].category; %>
                                             <%} %>
                                         <tr>
-                                            <td><%= menu[i].foodName%></td>
-                                            <td class="text-center"><%= menu[i].price %></td>
-                                            <td class="text-center"><%= menu[i].qty %></td>
-                                            <td class="text-center"><button formaction='additem/<%=i%>'>+</button></td>
+                                            <td style="word-break:break-all;" class="text-center"><%= menu[i].foodName%></td>
+                                            <td style="word-break:break-all;" class="text-center"><%= menu[i].price %></td>
+                                            <td style="word-break:break-all;" class="text-center"><%= menu[i].qty %></td>
+                                            <td style="word-break:break-all;" class="text-center"><button formaction='additem/<%=i%>'>+</button></td>
                                             <% if (order.orderdetails[i]) { %>
                                                 
-                                            <td class="text-center"> <%= order.orderdetails[i].qty %> </td>
+                                            <td style="word-break:break-all;" class="text-center"> <%= order.orderdetails[i].qty %> </td>
                                             <% } else { %>
-                                            <td class="text-center"> <%= 0 %> </td>
+                                            <td style="word-break:break-all;" class="text-center"> <%= 0 %> </td>
                                             <% } %>
 
-                                            <td class="text-center"><button formaction='removeitem/<%=i%>'>-</button></td>
+                                            <td style="word-break:break-all;" class="text-center"><button formaction='removeitem/<%=i%>'>-</button></td>
                                         </tr>
                                         <% } %>
                                         <tr>
@@ -66,7 +66,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td><button class="pull-right" formaction="order"> OKAY </button></td>
+                                            <td style="word-break:break-all;"><button class="pull-right" formaction="order"> OKAY </button></td>
                                         </tr>
                                     </tbody>
                                 </table>
