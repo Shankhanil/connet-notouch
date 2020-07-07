@@ -15,7 +15,7 @@ app.use(session({
   secret: '5ebe2294ecd0e0f08eab7690d2a6ee69',
   resave: true,
   saveUninitialized: true,
-  maxAge: 5000,
+  maxAge: 7 * 24 * 3600 * 1000,
 }));
 
 app.use(express.static('public'));

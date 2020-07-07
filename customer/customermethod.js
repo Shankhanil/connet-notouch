@@ -9,7 +9,7 @@ let resturantName; let
 let orderid = 0;
 exports.home = async (request, response) => {
   // eslint-disable-next-line max-len
-
+    console.log(request.session);
   if (request.session.loggedin
       && request.session.tableno === request.params.tableno
       && request.session.fssai === request.params.fssai
@@ -125,6 +125,7 @@ exports.begin = async (request, response) => {
     //      blockQuery.on('result', () => {
     //        // table blocked.
     //      });
+      console.log(request.session);
 
     response.render(path.join(`${__dirname}/customermenu.ejs`), {
       resturant: resturantName, tableno: request.params.tableno, order: request.session.order, menu,
