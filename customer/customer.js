@@ -1,10 +1,15 @@
 const express = require('express');
-
+const path = require('path');
 const router = express.Router();
 // const cacheMiddleware = require('../middlewares/cache');
 const customermethod = require('./customermethod');
 
 // Get customer login request
+
+router.get('/:fssai/:tableno/thankyou', async (req, res) => {
+  res.render(path.join(`${__dirname}/customerbye.ejs`));
+});
+
 router.post('/:fssai/:tableno/begin', customermethod.begin);
 router.get('/:fssai/:tableno/begin', customermethod.home);
 

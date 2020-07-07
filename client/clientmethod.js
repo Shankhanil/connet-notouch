@@ -25,17 +25,7 @@ exports.authpost = async (request, response) => {
 
     query.on('result', (result) => {
       if (result.password === password) {
-        if (menu.length === 0) {
-          const sql2 = `Select foodName, price, qty, category from menu_basic_${fssaiCode} where acive=1 order by category`;
-          const query2 = con.query({
-            sql: sql2,
-            timeout: 10000,
-          });
-
-          query2.on('result', (res) => {
-            menu.push(res);
-          });
-        }
+        //        }
         request.session.loggedin = true;
         request.session.username = fssaiCode;
         resturantName = result.name;
@@ -70,7 +60,20 @@ exports.end = async (request, response) => {
 
 exports.updatemenu = async (request, response) => {
   if (request.session.loggedin && request.session.username === request.params.fssaiCode) {
-    response.render(path.join(`${__dirname}/clientmenu.ejs`), { client: resturantName, menu });
+    menu.length = 0;
+    //        if (menu.length === 0) {
+    const sql2 = `Select foodName, price, qty, category from menu_basic_${request.params.fssaiCode} where acive=1 order by category`;
+    const query2 = con.query({
+      sql: sql2,
+      timeout: 10000,
+    });
+
+    query2.on('result', (res) => {
+      menu.push(res);
+    });
+    setTimeout(() => {
+      response.render(path.join(`${__dirname}/clientmenu.ejs`), { client: resturantName, menu });
+    }, 1000);
   } else {
     response.redirect('/client/clientauth');
     response.end();

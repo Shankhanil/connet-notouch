@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+        <script type="text/javascript">
+        function ValidatePassKey(tb) {
+          if (tb.TextLength >= 1)
+            document.getElementById(tb.id + 1).focus();
+          }
+        }
+        </script>
+
+        <!------ Include the above in your HEAD tag ---------->
+    </head>
+    
+    <body>
+        <div class="container">
+            <div class="row">
+            <div class="col-sm-6 col-sm-offset-2" ><!-- col -->
+                <h2><h1>Check your Messages!</h1></h2>
+                <p class="desc">We’ve sent a six-digit OTP code to <strong><%=mobileno%></strong>. Enter it below to begin your dining.</p>
+                <br><br><br>
+               <label><span class="normal">Your </span>OTP code</label>
+                
+                 <div class="confirmation_code split_input large_bottom_margin" data-multi-input-code="true">
+                        <div class="confirmation_code_group">
+                            <div class="split_input_item input_wrapper"><input type="text" onchange="ValidatePassKey(this)" class="inline_input" maxlength="1"></div>
+                            <div class="split_input_item input_wrapper"><input type="text" class="inline_input" maxlength="1"></div>
+                            <div class="split_input_item input_wrapper"><input type="text" class="inline_input" maxlength="1"></div>
+                        </div>
+
+                        <div class="confirmation_code_span_cell">—</div>
+
+                        <div class="confirmation_code_group">
+                            <div class="split_input_item input_wrapper"><input type="text" class="inline_input" maxlength="1"></div>
+                            <div class="split_input_item input_wrapper"><input type="text" class="inline_input" maxlength="1"></div>
+                            <div class="split_input_item input_wrapper"><input type="text" class="inline_input" maxlength="1"></div>
+                        </div>
+                    </div>
+                    </div><!-- endof col -->
+            </div>
+        </div>
+    </body>
+</html>

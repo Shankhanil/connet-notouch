@@ -10,17 +10,6 @@ const client = require('./client/client');
 const inst = require('./inst/inst');
 const customer = require('./customer/customer');
 
-// Database connection
-
-/*
-con.connect((err) => {
-  if (err) throw err;
-  con.query('SELECT * FROM customers', (_err, result) => {
-    if (_err) throw _err;
-    console.log(result);
-  });
-});
-*/
 // session
 app.use(session({
   secret: '5ebe2294ecd0e0f08eab7690d2a6ee69',
