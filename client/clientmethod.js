@@ -62,7 +62,7 @@ exports.updatemenu = async (request, response) => {
   if (request.session.loggedin && request.session.username === request.params.fssaiCode) {
     menu.length = 0;
     //        if (menu.length === 0) {
-    const sql2 = `Select foodName, price, qty, category from menu_basic_${request.params.fssaiCode} where acive=1 order by category`;
+    const sql2 = `Select foodName, price, qty, category from menu_basic_${request.params.fssaiCode} where acive=1 order by foodID, category`;
     const query2 = con.query({
       sql: sql2,
       timeout: 10000,

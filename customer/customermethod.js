@@ -50,7 +50,7 @@ exports.home = async (request, response) => {
       resturantName = result.name;
       gstin = result.gst;
       if (menu.length === 0) {
-        sql = `Select foodName, price, qty, category from menu_basic_${request.params.fssai} where acive=1 order by category`;
+        sql = `Select foodName, price, qty, category from menu_basic_${request.params.fssai} where acive=1 order by foodID, category`;
         query = con.query({
           sql,
           timeout: 10000,
