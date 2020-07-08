@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <style>
         .wrap {
             word-break: break-all;
@@ -59,14 +60,28 @@
                                             <tr>
                                                 <td class=".wrap"><%= menu[i].foodName%></td>
                                                 <td><%= menu[i].price %></td>
-                                                <td class="text-left"><button formaction='additem/<%=i%>'>+</button></td>
-                                                <% if (order.orderdetails[i]) { %>
-                                                <td class="text-center"> <%= order.orderdetails[i].qty %> </td>
-                                                <% } else { %>
-                                                <td></td>
-                                                <% } %>
-
-                                                <td><button formaction='removeitem/<%=i%>'>-</button></td>
+                                                <td class="text-left">
+                                                    <button type="button" ng-click="count = count + 1" id="addbtn<%=i%>">+</button>
+                                                </td>
+                                                <td><button button type="button" id="subbtn<%=i%>">-</button></td>                                                
+                                                <script>
+                                                    $(function() {
+                                                        $('#addbtn<%=i%>').click(function(event) {
+                                                            event.preventDefault();
+                                                            $.post('additem/<%=i%>', function(resp) {
+//                                                                alert(resp);
+                                                            });
+                                                        });
+                                                    });
+                                                    $(function() {
+                                                        $('#subbtn<%=i%>').click(function(event) {
+                                                            event.preventDefault();
+                                                            $.post('removeitem/<%=i%>', function(resp) {
+//                                                                alert(resp);
+                                                            });
+                                                        });
+                                                    });
+                                                    </script>
                                             </tr>
                                             <% if ( i == menu.length-1 || menu[i+1].category != cat) { %>
                                                 </table>
@@ -78,7 +93,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td><button class="pull-right" formaction="order">OKAY</button></td>
+                                            <td><button class="pull-right btn btn-info" formaction="order">OKAY</button></td>
                                         </tr>
                                     </tbody>
                                 </table>

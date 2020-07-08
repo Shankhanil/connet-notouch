@@ -244,8 +244,7 @@ exports.additem = async (request, response) => {
     } else {
       request.session.order.orderdetails[`${index}`].qty += 1;
     }
-    response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/menu`);
-    response.end();
+      response.send(`Added Item:${menu[index].foodName}`);
   } else {
     response.redirect(`/customer/${request.params.fssai}/${request.params.tableno}/begin`);
     response.end();
