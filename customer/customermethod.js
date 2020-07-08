@@ -203,8 +203,8 @@ exports.generatebill = async (request, response) => {
             * request.session.order.orderdetails[key].price;
       }
     }
-    const sgstamt = (sgst / 100) * bill;
-    const cgstamt = (cgst / 100) * bill;
+    const sgstamt = Math.ceil((sgst / 100) * bill);
+    const cgstamt = Math.ceil((cgst / 100) * bill);
     request.session.order.orderbill = Math.ceil(bill + sgstamt + cgstamt);
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
       resturant: resturantName,

@@ -39,31 +39,39 @@
 <!--                                <table class="table-bordered table-condensed" style="width: 100%">-->
                                 <table class="table-condensed table-responsive" style="width: 100%">
                                     <thead>
-                                        <tr>
-                                            <td><strong>Item</strong></td>
-                                            <td><strong>Price</strong></td>
-                                        </tr>
+                                        <tr></tr>
                                     </thead>
                                     <tbody>
                                         <% var cat=''; %>
                                         <% for (var i = 0; i<menu.length; i++) { %>
                                             <% if (menu[i].category != cat) {%>
-                                                <tr><td><strong> <%= menu[i].category %></strong> </td></tr>
                                                 <% cat = menu[i].category; %>
+                                                <tr>
+                                                    <td>
+                                                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<%=cat.replace(/ /g,'')%>"> 
+                                                            <%= cat %>
+                                                        </button>
+                                                        <br><br>
+                                                    </td>
+                                                </tr>
+                                            <table id="<%=cat.replace(/ /g,'')%>" class="table-condensed table-responsive collapse" style="width: 100%">
                                             <%} %>
-                                        <tr>
-                                            <td class=".wrap"><%= menu[i].foodName%></td>
-                                            <td><%= menu[i].price %></td>
-                                            <td class="text-left"><button formaction='additem/<%=i%>'>+</button></td>
-                                            <% if (order.orderdetails[i]) { %>
-                                                
-                                            <td class="text-center"> <%= order.orderdetails[i].qty %> </td>
-                                            <% } else { %>
-                                            <td></td>
-                                            <% } %>
+                                            <tr>
+                                                <td class=".wrap"><%= menu[i].foodName%></td>
+                                                <td><%= menu[i].price %></td>
+                                                <td class="text-left"><button formaction='additem/<%=i%>'>+</button></td>
+                                                <% if (order.orderdetails[i]) { %>
+                                                <td class="text-center"> <%= order.orderdetails[i].qty %> </td>
+                                                <% } else { %>
+                                                <td></td>
+                                                <% } %>
 
-                                            <td><button formaction='removeitem/<%=i%>'>-</button></td>
-                                        </tr>
+                                                <td><button formaction='removeitem/<%=i%>'>-</button></td>
+                                            </tr>
+                                            <% if ( i == menu.length-1 || menu[i+1].category != cat) { %>
+                                                </table>
+                                            <% } %>
+                                        
                                         <% } %>
                                         <tr>
                                             <td></td>
