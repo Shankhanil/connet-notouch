@@ -108,7 +108,7 @@ exports.begin = async (request, response) => {
       orderbill: 0,
       orderdetails: {},
     };
-    const sql2 = `delete from order_${request.params.fssai} where tableno = ?`;
+    const sql2 = `delete from order_${request.params.fssai} where tableno = ? and active = 1`;
     const vars2 = [request.params.tableno];
     const query2 = con.query({
       sql: sql2,
@@ -205,7 +205,7 @@ exports.generatebill = async (request, response) => {
     }
     const sgstamt = Math.ceil((sgst / 100) * bill);
     const cgstamt = Math.ceil((cgst / 100) * bill);
-    request.session.order.orderbill = Math.ceil(bill + sgstamt + cgstamt);
+    request.session.order.orderbill = request.session.order.orderbill + Math.ceil(bill + sgstamt + cgstamt);
     response.render(path.join(`${__dirname}/customerbill.ejs`), {
       resturant: resturantName,
       tableno: request.params.tableno,
@@ -274,21 +274,25 @@ exports.placeorder = async (request, response) => {
     for (const key in request.session.order.orderdetails) {
       if (request.session.order.orderdetails[key]
         && request.session.order.orderdetails[key].qty > 0) {
-        const sql = `insert into order_${request.params.fssai} (tableno, item, qty) values (?,?,?)`;
+        const sql = `insert into order_${request.params.fssai} (tableno, item, qty, orderid, price) values (?,?,?,?,?)`;
         const vars = [
           request.params.tableno,
           request.session.order.orderdetails[key].name,
           request.session.order.orderdetails[key].qty,
+            request.session.order.orderid,
+            request.session.order.orderdetails[key].price,
         ];
         const query = con.query({
           sql,
           timeout: 10000,
         }, vars);
-        query.on('result', () => {});
+        query.on('result', () => {
+        });
       }
     }
+    request.session.order.orderdetails = {};
     //  mailer.mailOrder(clientMail, message, request.params.tableno);
-    request.session.order.orderstatus = 'placed';
+//    request.session.order.orderstatus = 'placed';
     response.render(path.join(`${__dirname}/customerpayment.ejs`), {
       resturant: resturantName,
       tableno: request.params.tableno,

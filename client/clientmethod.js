@@ -111,7 +111,7 @@ exports.getorders = async (request, response) => {
       response.render(path.join(`${__dirname}/clientorders.ejs`), {
         resturant: resturantName, tableno: request.params.tableno, orders, datetime, unpaidbills,
       });
-    }, 1100);
+    }, 500);
     orders.length = 0;
     unpaidbills.length = 0;
   } else {
@@ -123,7 +123,7 @@ exports.getorders = async (request, response) => {
 exports.delivered = async (request, response) => {
   if (request.session.loggedin && request.session.username === request.params.fssaiCode) {
     const sql = `UPDATE order_${request.params.fssaiCode} SET active = 1 where tableno = ? and item = ? and qty = ?`;
-    const vars = [orders[`${request.params.orderid}`].tableno, orders[`${request.params.orderid}`].item, orders[`${request.params.orderid}`].qty];
+    const vars = [orders[`${request.params.tableno}`].tableno, orders[`${request.params.tableno}`].item, orders[`${request.params.tableno}`].qty];
     const query = con.query({
       sql,
       timeout: 10000,
@@ -150,6 +150,7 @@ exports.paid = async (request, response) => {
     query.on('result', () => {
       setTimeout(() => { response.redirect(`/client/${request.params.fssaiCode}/order`); }, 200);
     });
+      
   } else {
     response.redirect('/client/clientauth');
     response.end();
